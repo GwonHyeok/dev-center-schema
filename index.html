@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>발달센터 후기 앱 — 데이터 구조 & 관리자 설계</title>
+  <title>발달센터 후기 앱 — 설계 제안 응답</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,11 +16,6 @@
       --line: #e2e8f0;
       --bg: #f8fafc;
       --panel: #ffffff;
-      --pink: #ec4899;
-      --indigo: #6366f1;
-      --emerald: #10b981;
-      --amber: #f59e0b;
-      --sky: #0ea5e9;
     }
     html, body { background: var(--bg); color: var(--ink); font-family: 'Pretendard', -apple-system, sans-serif; }
     .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
@@ -32,366 +27,493 @@
     .chip-amber { background: rgba(245,158,11,0.1); color: #b45309; }
     .chip-sky { background: rgba(14,165,233,0.1); color: #0369a1; }
     .chip-slate { background: #f1f5f9; color: #475569; }
-    .entity-card { background: white; border: 2px solid; border-radius: 12px; padding: 16px; min-width: 200px; box-shadow: 0 4px 20px rgba(15,23,42,0.04); }
-    .line-relation { stroke-dasharray: 4 4; }
-    .anchor { scroll-margin-top: 40px; }
-    details summary { cursor: pointer; list-style: none; }
-    details summary::-webkit-details-marker { display: none; }
-    .code-block { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.7; overflow-x: auto; }
+    .entity-card { background: white; border: 2px solid; border-radius: 12px; padding: 16px; box-shadow: 0 4px 20px rgba(15,23,42,0.04); }
+    .anchor { scroll-margin-top: 64px; }
+    .code-block { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.7; overflow-x: auto; white-space: pre; }
     .code-block .kw { color: #c084fc; }
     .code-block .type { color: #60a5fa; }
     .code-block .str { color: #fbbf24; }
     .code-block .cmt { color: #64748b; font-style: italic; }
     .code-block .fn { color: #34d399; }
+    .feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
+    @media (max-width: 768px) { .feature-row { grid-template-columns: 1fr; } }
+    .quote-box { background: #fefce8; border-left: 3px solid #ca8a04; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 12.5px; color: #713f12; line-height: 1.55; }
   </style>
 </head>
 <body class="min-h-screen">
 
 <!-- Header -->
-<header class="border-b border-slate-200 bg-white/70 backdrop-blur-xl sticky top-0 z-40">
+<header class="border-b border-slate-200 bg-white/80 backdrop-blur-xl sticky top-0 z-40">
   <div class="max-w-[1100px] mx-auto px-6 py-4 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-500 to-indigo-600 flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg>
       </div>
       <div>
-        <div class="text-[14px] font-bold leading-tight">발달센터 후기 앱 — 데이터 구조 설계</div>
-        <div class="text-[11px] text-slate-500 mt-0.5">확장 고려 · 누적 데이터 · 관리자 직접 관리 구조</div>
+        <div class="text-[14px] font-bold leading-tight">발달센터 후기 앱 — 설계 제안 응답</div>
+        <div class="text-[11px] text-slate-500 mt-0.5">클라이언트 질문 2가지에 대한 구체 답변</div>
       </div>
     </div>
     <nav class="flex items-center gap-5 text-[12px] font-medium text-slate-600">
-      <a href="#erd" class="hover:text-slate-900">데이터 모델</a>
-      <a href="#admin" class="hover:text-slate-900">관리자 설계</a>
-      <a href="#scale" class="hover:text-slate-900">확장 고려</a>
-      <a href="#schema" class="hover:text-slate-900">SQL 스키마</a>
+      <a href="#q1" class="hover:text-slate-900">Q1 구조</a>
+      <a href="#q2" class="hover:text-slate-900">Q2 레퍼런스</a>
+      <a href="#sql" class="hover:text-slate-900">SQL</a>
     </nav>
   </div>
 </header>
 
 <!-- Hero -->
-<section class="max-w-[1100px] mx-auto px-6 pt-14 pb-12">
+<section class="max-w-[1100px] mx-auto px-6 pt-14 pb-10">
   <div class="flex items-center gap-2 mb-4">
-    <span class="chip chip-slate">MVP 1차 · 40일</span>
+    <span class="chip chip-slate">MVP 1차 · 40일 · 8,000,000원</span>
     <span class="chip chip-slate">Flutter + Supabase + Next.js</span>
-    <span class="chip chip-emerald">✓ 확장 가능 구조</span>
   </div>
-  <h1 class="text-[32px] font-bold leading-tight tracking-tight mb-4">
-    "지금은 작게, 나중에는 크게 키워도 <br class="hidden md:block" />
-    처음부터 다시 짜지 않는 구조"
+  <h1 class="text-[30px] font-bold leading-tight tracking-tight mb-4">
+    주신 질문 두 가지에, 의뢰하신 <br class="hidden md:block" />
+    기능을 기반으로 답변드립니다.
   </h1>
   <p class="text-[15px] text-slate-600 leading-relaxed max-w-[680px]">
-    센터 · 후기 · 태그 · 지역 데이터가 계속 누적되고, 운영자가 관리자
-    페이지에서 직접 관리하는 구조를 4개 핵심 엔티티와 워크플로우 기반으로
-    설계했습니다. 비개발자도 이해 가능한 구조 설명부터, 실제 SQL
-    스키마까지 한 번에 보여드립니다.
+    "의뢰서에 명시하신 9가지 주요 기능"이 실제로 어떤 데이터 구조와 관리자
+    플로우로 구현되는지, 그리고 왜 그 설계가 "이후 확장을 고려한 구조"인지를
+    한 페이지에 정리했습니다. 데이터 중심 플랫폼 개발 레퍼런스도 함께 넣었습니다.
   </p>
 </section>
 
-<!-- ERD (Visual) -->
-<section id="erd" class="max-w-[1100px] mx-auto px-6 pb-16 anchor">
-  <div class="flex items-end justify-between mb-6">
-    <div>
-      <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">01 · 데이터 모델</div>
-      <h2 class="text-[22px] font-bold">4개 엔티티가 서랍처럼 분리되어 연결됩니다</h2>
+<!-- Client Questions -->
+<section class="max-w-[1100px] mx-auto px-6 pb-12">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="panel p-5 border-l-4 border-l-amber-500">
+      <div class="text-[11px] chip chip-amber mb-2">클라이언트 질문 ①</div>
+      <p class="text-[13px] text-slate-700 leading-relaxed">
+        "센터/후기/태그/지역 데이터가 계속 누적되고, 운영자가 관리자
+        페이지에서 직접 관리하는 구조를 어떤 방식으로 설계하실 계획인지"
+      </p>
+      <div class="mt-3 text-[11px] text-slate-500">→ <a href="#q1" class="underline">아래 Q1 섹션에서 답변</a></div>
     </div>
-  </div>
-
-  <div class="panel p-10 relative overflow-x-auto">
-    <!-- ERD Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative" style="min-width: 920px;">
-      <!-- Region -->
-      <div class="entity-card border-sky-400">
-        <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200">
-          <div class="w-7 h-7 rounded-md bg-sky-100 flex items-center justify-center">📍</div>
-          <div>
-            <div class="text-[14px] font-bold">Region</div>
-            <div class="text-[10px] text-slate-500">지역</div>
-          </div>
-        </div>
-        <ul class="text-[12px] space-y-1.5 mono">
-          <li><span class="chip chip-slate" style="font-size:9px">PK</span> id</li>
-          <li class="text-slate-700">name <span class="text-slate-400 text-[10px]">(양천구)</span></li>
-          <li class="text-slate-700">parent_id <span class="text-slate-400 text-[10px]">→ self</span></li>
-          <li class="text-slate-700">level <span class="text-slate-400 text-[10px]">(도/시/구/동)</span></li>
-          <li class="text-slate-700">sort_order</li>
-        </ul>
-        <div class="mt-3 pt-3 border-t border-slate-100">
-          <div class="text-[10px] font-semibold text-sky-700 mb-1">Tree 예시</div>
-          <div class="text-[11px] text-slate-600 leading-relaxed">
-            서울특별시<br />
-            ├─ 양천구<br />
-            │  └─ 목동 · 신정동<br />
-            └─ 강남구
-          </div>
-        </div>
-      </div>
-
-      <!-- Center -->
-      <div class="entity-card border-pink-400">
-        <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200">
-          <div class="w-7 h-7 rounded-md bg-pink-100 flex items-center justify-center">🏥</div>
-          <div>
-            <div class="text-[14px] font-bold">Center</div>
-            <div class="text-[10px] text-slate-500">발달센터</div>
-          </div>
-        </div>
-        <ul class="text-[12px] space-y-1.5 mono">
-          <li><span class="chip chip-slate" style="font-size:9px">PK</span> id</li>
-          <li class="text-slate-700">name</li>
-          <li class="text-slate-700">region_id <span class="text-slate-400 text-[10px]">→ Region</span></li>
-          <li class="text-slate-700">address</li>
-          <li class="text-slate-700">phone</li>
-          <li class="text-slate-700">naver_map_url</li>
-          <li class="text-slate-700">status <span class="text-slate-400 text-[10px]">(active/hidden)</span></li>
-          <li class="text-slate-700">created_at</li>
-        </ul>
-        <div class="mt-3 pt-3 border-t border-slate-100">
-          <div class="text-[10px] font-semibold text-pink-700 mb-1">관계</div>
-          <div class="flex flex-wrap gap-1">
-            <span class="chip chip-sky">↑ Region 다대일</span>
-            <span class="chip chip-indigo">↔ Tag 다대다</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tag -->
-      <div class="entity-card border-indigo-400">
-        <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200">
-          <div class="w-7 h-7 rounded-md bg-indigo-100 flex items-center justify-center">🏷️</div>
-          <div>
-            <div class="text-[14px] font-bold">Tag</div>
-            <div class="text-[10px] text-slate-500">태그</div>
-          </div>
-        </div>
-        <ul class="text-[12px] space-y-1.5 mono">
-          <li><span class="chip chip-slate" style="font-size:9px">PK</span> id</li>
-          <li class="text-slate-700">name <span class="text-slate-400 text-[10px]">(언어치료)</span></li>
-          <li class="text-slate-700">category <span class="text-slate-400 text-[10px]">(유형/강점/환경)</span></li>
-          <li class="text-slate-700">aliases[] <span class="text-slate-400 text-[10px]">(동의어)</span></li>
-          <li class="text-slate-700">parent_id <span class="text-slate-400 text-[10px]">→ self</span></li>
-          <li class="text-slate-700">sort_order</li>
-        </ul>
-        <div class="mt-3 pt-3 border-t border-slate-100">
-          <div class="text-[10px] font-semibold text-indigo-700 mb-1">카테고리 예</div>
-          <div class="text-[11px] text-slate-600 leading-relaxed">
-            [유형] 언어치료 · 감각통합 · 놀이치료<br />
-            [강점] 친절한 선생님 · 깔끔한 시설<br />
-            [환경] 주차 편리 · 대중교통 가까움
-          </div>
-        </div>
-      </div>
-
-      <!-- Review -->
-      <div class="entity-card border-emerald-400">
-        <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200">
-          <div class="w-7 h-7 rounded-md bg-emerald-100 flex items-center justify-center">💬</div>
-          <div>
-            <div class="text-[14px] font-bold">Review</div>
-            <div class="text-[10px] text-slate-500">후기</div>
-          </div>
-        </div>
-        <ul class="text-[12px] space-y-1.5 mono">
-          <li><span class="chip chip-slate" style="font-size:9px">PK</span> id</li>
-          <li class="text-slate-700">center_id <span class="text-slate-400 text-[10px]">→ Center</span></li>
-          <li class="text-slate-700">author_id <span class="text-slate-400 text-[10px]">→ User</span></li>
-          <li class="text-slate-700">content <span class="text-slate-400 text-[10px]">(한줄)</span></li>
-          <li class="text-slate-700">status <span class="text-slate-400 text-[10px]">(visible/hidden)</span></li>
-          <li class="text-slate-700">report_count</li>
-          <li class="text-slate-700">created_at</li>
-        </ul>
-        <div class="mt-3 pt-3 border-t border-slate-100">
-          <div class="text-[10px] font-semibold text-emerald-700 mb-1">관계</div>
-          <div class="flex flex-wrap gap-1">
-            <span class="chip chip-pink">↑ Center 다대일</span>
-            <span class="chip chip-indigo">↔ Tag 다대다</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Join tables hint -->
-    <div class="mt-8 grid grid-cols-2 gap-4">
-      <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-        <div class="flex items-center gap-2 mb-1">
-          <span class="chip chip-slate mono">center_tag</span>
-          <span class="text-[11px] text-slate-500">조인 테이블</span>
-        </div>
-        <div class="text-[11px] mono text-slate-600">center_id · tag_id · (type: 제공/특징)</div>
-      </div>
-      <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-        <div class="flex items-center gap-2 mb-1">
-          <span class="chip chip-slate mono">review_tag</span>
-          <span class="text-[11px] text-slate-500">조인 테이블</span>
-        </div>
-        <div class="text-[11px] mono text-slate-600">review_id · tag_id</div>
-      </div>
-    </div>
-
-    <!-- Legend -->
-    <div class="mt-8 p-4 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200">
-      <div class="text-[12px] text-slate-600 leading-relaxed">
-        <strong class="text-slate-900">왜 분리했나요?</strong>
-        각 서랍은 서로 '연결'만 되어 있어서, 지역을 늘리거나 태그를 새로
-        만들어도 기존 데이터를 건드리지 않고 확장됩니다.
-        <span class="text-slate-500">예시)</span> 새 동이 생기면 Region 트리에 한 줄만 추가 →
-        기존 Center·Review 데이터는 그대로 유지.
-      </div>
+    <div class="panel p-5 border-l-4 border-l-amber-500">
+      <div class="text-[11px] chip chip-amber mb-2">클라이언트 질문 ②</div>
+      <p class="text-[13px] text-slate-700 leading-relaxed">
+        "유사한 구조(데이터 중심 플랫폼)를 설계·개발하신 경험이 있으시면
+        간단히 공유 부탁드립니다."
+      </p>
+      <div class="mt-3 text-[11px] text-slate-500">→ <a href="#q2" class="underline">아래 Q2 섹션에서 답변</a></div>
     </div>
   </div>
 </section>
 
-<!-- Admin flow -->
-<section id="admin" class="max-w-[1100px] mx-auto px-6 pb-16 anchor">
+<!-- Q1 -->
+<section id="q1" class="max-w-[1100px] mx-auto px-6 pb-10 anchor">
   <div class="mb-6">
-    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">02 · 관리자 설계</div>
-    <h2 class="text-[22px] font-bold">운영자가 페이지를 열면 바로 할 수 있는 것</h2>
+    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Q1 답변</div>
+    <h2 class="text-[24px] font-bold">의뢰하신 9가지 기능 → 데이터 설계 매핑</h2>
+    <p class="text-[13.5px] text-slate-600 mt-2">의뢰서 원문을 그대로 가져와, 각 기능이 어떤 테이블·필드·관계로 구현되는지 1:1로 연결했습니다.</p>
+  </div>
+
+  <div class="space-y-4">
+    <!-- F1 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"지역 기반 센터 리스트 조회"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            <strong>Region</strong> 테이블을 <span class="mono text-slate-900">parent_id</span> 자기참조로 계층화
+            (도 → 시 → 구 → 동). Center는 <span class="mono text-slate-900">region_id</span>로 소속.
+            구 단위 선택 시 하위 동까지 포함해 조회.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"센터명 및 치료 유형 기반 검색"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            센터명은 <strong>PostgreSQL full-text</strong> 인덱스. 치료 유형은
+            <strong>Tag(category='type')</strong> 필터로, <span class="mono text-slate-900">center_tag</span> 조인으로 검색.
+            복합 인덱스 <span class="mono text-slate-900">(region_id, status)</span>로 리스트 조회 성능 확보.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F3 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"센터 상세 페이지 (후기 요약, 후기 미리보기)"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            Center에 <strong>캐시 필드</strong> (<span class="mono text-slate-900">review_count, top_tags</span>) 추가.
+            후기 작성·삭제 시 트리거로 자동 갱신 → 상세 페이지 로딩 1회 쿼리로 완료.
+            미리보기는 최신 3개를 join으로 같이 내림.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F4 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"후기 리스트 조회 (최신순 정렬)"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            Review에 <strong>복합 인덱스</strong> <span class="mono text-slate-900">(center_id, status, created_at DESC)</span>.
+            무한 스크롤은 <span class="mono text-slate-900">created_at</span> 커서 기반 페이지네이션으로
+            수만 건도 일정 속도 유지.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F5 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"후기 작성 기능 (태그 선택 + 한 줄 후기)"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            Review에 <strong>한 줄 제한</strong> (CHECK <span class="mono text-slate-900">length(content) ≤ 100</span>).
+            태그는 <span class="mono text-slate-900">review_tag</span> 다대다. 태그는 카테고리별로 그룹핑돼
+            "치료 유형 1개 + 강점 여러 개" 같은 선택 규칙 적용.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F6 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"카카오 로그인 (후기 작성 시)"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            Supabase Auth + <strong>Kakao OAuth Provider</strong> 연동. 탐색·리스트·상세는 비로그인
+            허용, 후기 작성 버튼 클릭 시에만 로그인 요구하는 <strong>'선택적 인증'</strong>으로
+            학부모 진입장벽 최소화.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F7 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"카카오톡 공유 기능"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            Kakao JavaScript SDK로 <strong>피드형 공유</strong>. 공유 카드에는 센터명, 지역,
+            대표 태그 3개, 공유 전용 딥링크를 넣어 앱으로 바로 복귀하도록 구성.
+            스키마에 별도 테이블 불필요.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F8 -->
+    <div class="panel p-5">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰 요구사항</div>
+          <div class="quote-box">"네이버 지도 연동 (외부 이동)"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            Center 테이블에 <span class="mono text-slate-900">naver_map_url</span> 필드 저장.
+            상세 화면 '지도 보기' 버튼 → 네이버 지도 앱/웹으로 이동(fallback 처리).
+            좌표(lat/lng)도 함께 저장해 추후 인앱 지도 전환에 대비.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F9 -->
+    <div class="panel p-5 bg-gradient-to-br from-indigo-50 to-white border-indigo-200">
+      <div class="feature-row">
+        <div>
+          <div class="chip chip-indigo mb-2">의뢰 요구사항 (핵심)</div>
+          <div class="quote-box">"관리자 페이지 (센터/후기/태그/지역 관리)"</div>
+        </div>
+        <div>
+          <div class="chip chip-sky mb-2">설계</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            4개 엔티티 각각 CRUD + 아래 6가지 운영 기능 내장.
+            <strong>"누가·언제·뭘 수정했는지"</strong>는 audit_log 테이블에 자동 기록 → 복원 가능.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Flow -->
+  <div class="panel mt-6 p-6">
+    <div class="text-[13px] font-bold mb-4">관리자 페이지 — 운영자가 실제로 하는 6가지</div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-slate-50 rounded-lg p-4">
+        <div class="text-[11px] chip chip-pink mb-2">센터</div>
+        <div class="font-semibold text-[13px] mb-1">CSV 일괄 업로드</div>
+        <div class="text-[11.5px] text-slate-600">초기 데이터를 엑셀 파일로 한 번에 등록. 1개 시범 지역 센터 수십 곳 시드 작업에 필수.</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-4">
+        <div class="text-[11px] chip chip-sky mb-2">지역</div>
+        <div class="font-semibold text-[13px] mb-1">트리 뷰 + 누락 표시</div>
+        <div class="text-[11.5px] text-slate-600">지역을 계층으로 보고, 센터 0개인 지역을 별색으로 표시해 확장 우선순위 파악.</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-4">
+        <div class="text-[11px] chip chip-indigo mb-2">태그</div>
+        <div class="font-semibold text-[13px] mb-1">동의어 통합</div>
+        <div class="text-[11.5px] text-slate-600">'언어치료/언어발달' 같은 중복 태그는 aliases 배열로 묶어 검색 통합.</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-4">
+        <div class="text-[11px] chip chip-emerald mb-2">후기</div>
+        <div class="font-semibold text-[13px] mb-1">신고 검토 워크플로우</div>
+        <div class="text-[11.5px] text-slate-600">신고 누적 후기는 목록 상단에 뜸. 숨김/복원 클릭 한 번. 신고 사유 통계로 악용 감지.</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-4">
+        <div class="text-[11px] chip chip-amber mb-2">감사</div>
+        <div class="font-semibold text-[13px] mb-1">변경 이력 자동 기록</div>
+        <div class="text-[11.5px] text-slate-600">운영자 복수여도 누가 언제 무엇을 고쳤는지 audit_log 자동 기록. 복원 가능.</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-4">
+        <div class="text-[11px] chip chip-slate mb-2">통계</div>
+        <div class="font-semibold text-[13px] mb-1">기본 대시보드</div>
+        <div class="text-[11.5px] text-slate-600">지역별 센터·후기 수, 태그 인기 순위, 신규 가입자 추이 — 운영 감을 잡을 최소 지표.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERD -->
+  <div class="panel mt-6 p-8 overflow-x-auto">
+    <div class="text-[13px] font-bold mb-5">전체 데이터 모델 한눈에</div>
+    <div class="grid grid-cols-4 gap-5" style="min-width: 900px;">
+      <div class="entity-card border-sky-400">
+        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200">
+          <div class="w-7 h-7 rounded bg-sky-100 flex items-center justify-center">📍</div>
+          <div><div class="text-[13px] font-bold">Region</div><div class="text-[10px] text-slate-500">지역 (계층)</div></div>
+        </div>
+        <ul class="text-[11.5px] space-y-1 mono text-slate-700">
+          <li>id · name · parent_id</li>
+          <li>level · sort_order</li>
+        </ul>
+      </div>
+      <div class="entity-card border-pink-400">
+        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200">
+          <div class="w-7 h-7 rounded bg-pink-100 flex items-center justify-center">🏥</div>
+          <div><div class="text-[13px] font-bold">Center</div><div class="text-[10px] text-slate-500">발달센터</div></div>
+        </div>
+        <ul class="text-[11.5px] space-y-1 mono text-slate-700">
+          <li>id · name · region_id</li>
+          <li>address · phone</li>
+          <li>naver_map_url · lat/lng</li>
+          <li>review_count (캐시)</li>
+          <li>top_tags (캐시)</li>
+          <li>status · created_at</li>
+        </ul>
+      </div>
+      <div class="entity-card border-indigo-400">
+        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200">
+          <div class="w-7 h-7 rounded bg-indigo-100 flex items-center justify-center">🏷️</div>
+          <div><div class="text-[13px] font-bold">Tag</div><div class="text-[10px] text-slate-500">태그 (카테고리)</div></div>
+        </div>
+        <ul class="text-[11.5px] space-y-1 mono text-slate-700">
+          <li>id · name · category</li>
+          <li>aliases[] (동의어)</li>
+          <li>parent_id · sort_order</li>
+        </ul>
+      </div>
+      <div class="entity-card border-emerald-400">
+        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200">
+          <div class="w-7 h-7 rounded bg-emerald-100 flex items-center justify-center">💬</div>
+          <div><div class="text-[13px] font-bold">Review</div><div class="text-[10px] text-slate-500">후기</div></div>
+        </div>
+        <ul class="text-[11.5px] space-y-1 mono text-slate-700">
+          <li>id · center_id · author_id</li>
+          <li>content (≤100자)</li>
+          <li>status · report_count</li>
+          <li>created_at</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-6">
+      <div class="bg-slate-50 rounded-lg p-3"><div class="chip chip-slate mono mb-1">User</div><div class="text-[11px] text-slate-600">Supabase Auth + Kakao provider</div></div>
+      <div class="bg-slate-50 rounded-lg p-3"><div class="chip chip-slate mono mb-1">center_tag / review_tag</div><div class="text-[11px] text-slate-600">다대다 조인 테이블</div></div>
+      <div class="bg-slate-50 rounded-lg p-3"><div class="chip chip-slate mono mb-1">audit_log</div><div class="text-[11px] text-slate-600">운영자 변경 자동 기록</div></div>
+    </div>
+  </div>
+
+  <!-- Scale -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+    <div class="panel p-5">
+      <div class="chip chip-sky mb-2">확장 ①</div>
+      <div class="font-bold text-[14px] mb-1">복합 인덱스 설계</div>
+      <p class="text-[12px] text-slate-600 leading-relaxed">'지역 + 치료유형' 같은 자주 쓰는 조건을 복합 인덱스로 묶어 수십만 건 데이터에서도 일정한 조회 속도.</p>
+    </div>
+    <div class="panel p-5">
+      <div class="chip chip-indigo mb-2">확장 ②</div>
+      <div class="font-bold text-[14px] mb-1">검색 업그레이드 어댑터</div>
+      <p class="text-[12px] text-slate-600 leading-relaxed">초기엔 PostgreSQL full-text → 데이터가 수만 건을 넘으면 Meilisearch/Algolia로 교체. 앱 코드는 그대로.</p>
+    </div>
+    <div class="panel p-5">
+      <div class="chip chip-emerald mb-2">확장 ③</div>
+      <div class="font-bold text-[14px] mb-1">RLS로 2차 기능 대비</div>
+      <p class="text-[12px] text-slate-600 leading-relaxed">'센터가 자기 후기만 보는' B2B 페이지 추가 시, Supabase Row Level Security 정책 추가만으로 대응.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Q2 -->
+<section id="q2" class="max-w-[1100px] mx-auto px-6 pb-10 anchor">
+  <div class="mb-6">
+    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Q2 답변</div>
+    <h2 class="text-[24px] font-bold">유사한 데이터 중심 플랫폼 설계·개발 레퍼런스</h2>
+    <p class="text-[13.5px] text-slate-600 mt-2">네 가지 모두 제가 풀스택으로 설계·개발·납품한 프로젝트입니다. 운영 주체가 아닌, 릴리즈 단계까지 수행한 외주 개발 실적입니다.</p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <!-- Action 1 -->
-    <div class="panel p-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-7 h-7 rounded-lg bg-pink-100 flex items-center justify-center text-[13px]">1</div>
-        <div class="font-bold text-[15px]">센터 추가</div>
-      </div>
-      <ul class="text-[13px] text-slate-600 space-y-1.5 ml-9">
-        <li>• 화면에서 한 건씩 직접 입력</li>
-        <li>• <strong class="text-slate-900">엑셀(CSV) 파일로 수십 개 한 번에 업로드</strong></li>
-        <li>• 누락된 지역은 자동 리스트업</li>
-      </ul>
-    </div>
 
-    <!-- Action 2 -->
+    <!-- Ref 1: 에브리스타즈 -->
     <div class="panel p-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center text-[13px]">2</div>
-        <div class="font-bold text-[15px]">지역 관리</div>
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <div class="chip chip-pink mb-2">도메인 100% 일치</div>
+          <h3 class="text-[16px] font-bold">에브리스타즈 (모든별키즈)</h3>
+          <div class="text-[11px] text-slate-500 mt-1">everystars.co.kr · Next.js 풀스택 납품</div>
+        </div>
       </div>
-      <ul class="text-[13px] text-slate-600 space-y-1.5 ml-9">
-        <li>• 트리 뷰로 한눈에 보기</li>
-        <li>• 새 동·구 생기면 한 줄 추가</li>
-        <li>• 센터가 없는 지역은 표시로 구분</li>
-      </ul>
-    </div>
-
-    <!-- Action 3 -->
-    <div class="panel p-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center text-[13px]">3</div>
-        <div class="font-bold text-[15px]">태그 관리</div>
-      </div>
-      <ul class="text-[13px] text-slate-600 space-y-1.5 ml-9">
-        <li>• 카테고리(유형/강점/환경)별 그룹화</li>
-        <li>• <strong class="text-slate-900">'언어치료 = 언어발달' 같은 동의어 통합</strong></li>
-        <li>• 자주 쓰이는 태그 정렬 우선순위</li>
-      </ul>
-    </div>
-
-    <!-- Action 4 -->
-    <div class="panel p-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-[13px]">4</div>
-        <div class="font-bold text-[15px]">후기 검토</div>
-      </div>
-      <ul class="text-[13px] text-slate-600 space-y-1.5 ml-9">
-        <li>• 신고된 후기 목록에서 검토</li>
-        <li>• 숨김 / 복원 클릭 한 번</li>
-        <li>• 신고 사유 통계로 악용 감지</li>
-      </ul>
-    </div>
-
-    <!-- Action 5 -->
-    <div class="panel p-6 col-span-1 md:col-span-2 bg-gradient-to-br from-amber-50 to-white border-amber-200">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center text-[13px]">5</div>
-        <div class="font-bold text-[15px]">감사 로그 (자동)</div>
-      </div>
-      <p class="text-[13px] text-slate-600 ml-9">
-        <strong class="text-slate-900">누가 · 언제 · 무엇을 수정했는지 자동 기록</strong>됩니다.
-        문제가 생기면 이전 상태로 복원 가능. 운영자 여러 명이 될 때도
-        책임 추적 가능한 구조.
+      <p class="text-[13px] text-slate-700 leading-relaxed mb-3">
+        대한민국 No.1 아동 발달 전문가 매칭 플랫폼. 본 프로젝트와
+        <strong>동일한 학부모 유저층·동일한 치료 도메인</strong>(언어·감각통합·놀이치료).
       </p>
+      <div class="bg-slate-50 rounded-lg p-3 text-[11.5px] text-slate-600 leading-relaxed">
+        <div class="font-semibold text-slate-800 mb-1">본 프로젝트에 직접 적용되는 경험</div>
+        • 전문가·지역·카테고리 다대다 관계 설계<br>
+        • 관리자 페이지에서 전문가 검증(자격증·경력·성범죄 조회) 워크플로우<br>
+        • CSV 일괄 등록 + 학부모 탐색 UX<br>
+        • 데이터 누적에 대비한 인덱스·캐시 전략
+      </div>
     </div>
+
+    <!-- Ref 2: SoulTalk -->
+    <div class="panel p-6">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <div class="chip chip-indigo mb-2">기술 스택 동일</div>
+          <h3 class="text-[16px] font-bold">SoulTalk (소울톡)</h3>
+          <div class="text-[11px] text-slate-500 mt-1">soultalk.kr · Flutter 앱 + 백엔드 단독 개발</div>
+        </div>
+      </div>
+      <p class="text-[13px] text-slate-700 leading-relaxed mb-3">
+        국내 1위 타로·사주·신점 상담 앱. 본 공고와
+        <strong>'지역 기반 탐색 → 상세 → 후기/태그 → 외부 지도 → 카카오 로그인/공유'</strong>
+        구조가 100% 동일.
+      </p>
+      <div class="bg-slate-50 rounded-lg p-3 text-[11.5px] text-slate-600 leading-relaxed">
+        <div class="font-semibold text-slate-800 mb-1">본 프로젝트에 직접 적용되는 경험</div>
+        • Flutter 앱 iOS/Android 동시 배포<br>
+        • 상담사 리스트/검색 + 후기/태그 다대다<br>
+        • 신고·관리 플로우 + 운영자 자동화 툴<br>
+        • 카카오 로그인 + 카카오톡 공유 실구현
+      </div>
+    </div>
+
+    <!-- Ref 3: 짐데이 -->
+    <div class="panel p-6">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <div class="chip chip-emerald mb-2">대용량 누적 데이터</div>
+          <h3 class="text-[16px] font-bold">짐데이</h3>
+          <div class="text-[11px] text-slate-500 mt-1">Flutter 앱 풀스택 · 누적 100만+ 다운로드</div>
+        </div>
+      </div>
+      <p class="text-[13px] text-slate-700 leading-relaxed mb-3">
+        피트니스 앱. 회원·운동 기록·리워드가 <strong>장기간 누적되는 구조</strong>를
+        설계·운영한 경험.
+      </p>
+      <div class="bg-slate-50 rounded-lg p-3 text-[11.5px] text-slate-600 leading-relaxed">
+        <div class="font-semibold text-slate-800 mb-1">본 프로젝트에 직접 적용되는 경험</div>
+        • 리스트·검색·후기 구조 상용 운영<br>
+        • 데이터 누적에 따른 쿼리 최적화 실전<br>
+        • 회원 리워드·참여 유도 설계 노하우
+      </div>
+    </div>
+
+    <!-- Ref 4: TUK -->
+    <div class="panel p-6">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <div class="chip chip-amber mb-2">스택 구성 동일</div>
+          <h3 class="text-[16px] font-bold">TUK (캐시백 리워드 앱)</h3>
+          <div class="text-[11px] text-slate-500 mt-1">Flutter + NestJS + 관리자 웹 풀스택</div>
+        </div>
+      </div>
+      <p class="text-[13px] text-slate-700 leading-relaxed mb-3">
+        본 공고와 <strong>기술 스택 구성이 거의 동일</strong>(Flutter + Node 백엔드 + 관리자 웹).
+      </p>
+      <div class="bg-slate-50 rounded-lg p-3 text-[11.5px] text-slate-600 leading-relaxed">
+        <div class="font-semibold text-slate-800 mb-1">본 프로젝트에 직접 적용되는 경험</div>
+        • 회원·정산·관리자 엔티티 구조 설계<br>
+        • 관리자 CSV 업로드 + 검수 플로우<br>
+        • 리워드 트랜잭션 무결성 보장
+      </div>
+    </div>
+
   </div>
 
-  <!-- Review workflow -->
-  <div class="panel mt-6 p-6">
-    <div class="text-[13px] font-bold mb-4 flex items-center gap-2">
-      <span>후기 워크플로우</span>
-      <span class="chip chip-slate">Review Lifecycle</span>
-    </div>
-    <div class="flex flex-wrap items-center gap-2 text-[12px]">
-      <div class="px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 font-medium">① 작성</div>
-      <span class="text-slate-400">→</span>
-      <div class="px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 font-medium">② 게시됨 (visible)</div>
-      <span class="text-slate-400">→</span>
-      <div class="px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 font-medium">③ 신고 누적</div>
-      <span class="text-slate-400">→</span>
-      <div class="px-3 py-2 rounded-lg bg-indigo-50 border border-indigo-200 font-medium">④ 관리자 검토</div>
-      <span class="text-slate-400">→</span>
-      <div class="px-3 py-2 rounded-lg bg-slate-100 border border-slate-200 font-medium">⑤ 숨김 or 복원</div>
-    </div>
+  <!-- Summary -->
+  <div class="panel mt-6 p-6 bg-gradient-to-br from-slate-50 to-white">
+    <div class="font-bold text-[14px] mb-2">공통 패턴</div>
+    <p class="text-[13px] text-slate-700 leading-relaxed">
+      네 프로젝트 모두 <strong>"누적 데이터 + 카테고리화된 태그/분류 + 관리자 검수 플로우 + 모바일 앱"</strong>
+      구조가 반복됩니다. 본 프로젝트가 요구하는 구조와 정확히 같아, 설계 과정에서 시행착오 없이
+      바로 진입 가능합니다.
+    </p>
   </div>
 </section>
 
-<!-- Scalability -->
-<section id="scale" class="max-w-[1100px] mx-auto px-6 pb-16 anchor">
+<!-- SQL -->
+<section id="sql" class="max-w-[1100px] mx-auto px-6 pb-16 anchor">
   <div class="mb-6">
-    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">03 · 확장 고려</div>
-    <h2 class="text-[22px] font-bold">데이터가 쌓여도 느려지지 않고, 2차 기능이 자연스럽게 붙는 구조</h2>
+    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">부록 · 실제 SQL 스키마</div>
+    <h2 class="text-[22px] font-bold">의뢰 기능이 모두 반영된 스키마</h2>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-    <div class="panel p-6">
-      <div class="text-[11px] chip chip-sky mb-3">성능</div>
-      <div class="font-bold text-[15px] mb-2">복합 인덱스 설계</div>
-      <p class="text-[12.5px] text-slate-600 leading-relaxed">
-        '지역 + 치료 유형' 같은 자주 쓰는 조건을 복합 인덱스로 묶어 수십만
-        개 데이터도 빠르게 조회. 후기 수가 쌓여도 리스트 로딩 시간 일정
-        유지.
-      </p>
-    </div>
-
-    <div class="panel p-6">
-      <div class="text-[11px] chip chip-indigo mb-3">검색 업그레이드</div>
-      <div class="font-bold text-[15px] mb-2">어댑터 교체 가능</div>
-      <p class="text-[12.5px] text-slate-600 leading-relaxed">
-        초기엔 PostgreSQL 자체 검색 기능으로 충분. 데이터가 수만 개를
-        넘어서면 <span class="mono text-slate-800">Meilisearch / Algolia</span>로 검색부만 교체.
-        앱 코드는 그대로 유지.
-      </p>
-    </div>
-
-    <div class="panel p-6">
-      <div class="text-[11px] chip chip-emerald mb-3">2차 확장</div>
-      <div class="font-bold text-[15px] mb-2">권한 정책 사전 준비</div>
-      <p class="text-[12.5px] text-slate-600 leading-relaxed">
-        2차에서 '센터가 직접 로그인해서 자기 후기만 보는 페이지'가 생길 때,
-        <span class="mono text-slate-800">Supabase Row Level Security</span>로 정책 추가만 하면
-        됨. 스키마 재설계 불필요.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- SQL Schema preview -->
-<section id="schema" class="max-w-[1100px] mx-auto px-6 pb-16 anchor">
-  <div class="mb-6">
-    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">04 · 실제 SQL 스키마 (요약)</div>
-    <h2 class="text-[22px] font-bold">개발자 관점에서도 바로 쓸 수 있는 형태</h2>
-  </div>
-
-  <div class="code-block"><span class="cmt">-- 지역 (계층 구조)</span>
+  <div class="code-block"><span class="cmt">-- 1. 지역 (계층 구조) — "지역 기반 센터 리스트 조회"</span>
 <span class="kw">CREATE TABLE</span> <span class="fn">region</span> (
   id           <span class="type">bigserial PRIMARY KEY</span>,
   name         <span class="type">text NOT NULL</span>,
   parent_id    <span class="type">bigint REFERENCES region(id)</span>,
-  level        <span class="type">smallint NOT NULL</span>,  <span class="cmt">-- 1:도, 2:시, 3:구, 4:동</span>
-  sort_order   <span class="type">int DEFAULT 0</span>,
-  created_at   <span class="type">timestamptz DEFAULT now()</span>
+  level        <span class="type">smallint NOT NULL</span>,
+  sort_order   <span class="type">int DEFAULT 0</span>
 );
 
-<span class="cmt">-- 발달센터</span>
+<span class="cmt">-- 2. 발달센터 — "센터 상세 (후기 요약, 미리보기)" 대응 캐시 필드 포함</span>
 <span class="kw">CREATE TABLE</span> <span class="fn">center</span> (
   id              <span class="type">bigserial PRIMARY KEY</span>,
   name            <span class="type">text NOT NULL</span>,
@@ -399,54 +521,67 @@
   address         <span class="type">text</span>,
   phone           <span class="type">text</span>,
   naver_map_url   <span class="type">text</span>,
-  status          <span class="type">text DEFAULT</span> <span class="str">'active'</span>,  <span class="cmt">-- active | hidden</span>
+  lat             <span class="type">double precision</span>,
+  lng             <span class="type">double precision</span>,
+  review_count    <span class="type">int DEFAULT 0</span>,          <span class="cmt">-- 후기 요약 캐시</span>
+  top_tags        <span class="type">text[] DEFAULT</span> <span class="str">'{}'</span>,     <span class="cmt">-- 상위 태그 캐시</span>
+  status          <span class="type">text DEFAULT</span> <span class="str">'active'</span>,
   created_at      <span class="type">timestamptz DEFAULT now()</span>,
   updated_at      <span class="type">timestamptz DEFAULT now()</span>
 );
 <span class="kw">CREATE INDEX</span> ON <span class="fn">center</span> (region_id, status);
 
-<span class="cmt">-- 태그</span>
+<span class="cmt">-- 3. 태그 (카테고리화) — "태그 선택 + 한 줄 후기" 대응</span>
 <span class="kw">CREATE TABLE</span> <span class="fn">tag</span> (
   id          <span class="type">bigserial PRIMARY KEY</span>,
   name        <span class="type">text NOT NULL UNIQUE</span>,
-  category    <span class="type">text NOT NULL</span>,  <span class="cmt">-- type | strength | env</span>
+  category    <span class="type">text NOT NULL</span>,              <span class="cmt">-- type | strength | env</span>
   aliases     <span class="type">text[] DEFAULT</span> <span class="str">'{}'</span>,
   parent_id   <span class="type">bigint REFERENCES tag(id)</span>,
   sort_order  <span class="type">int DEFAULT 0</span>
 );
 
-<span class="cmt">-- 후기</span>
+<span class="cmt">-- 4. 후기 — "후기 리스트 (최신순 정렬)" 대응 인덱스</span>
 <span class="kw">CREATE TABLE</span> <span class="fn">review</span> (
   id            <span class="type">bigserial PRIMARY KEY</span>,
   center_id     <span class="type">bigint NOT NULL REFERENCES center(id)</span>,
-  author_id     <span class="type">uuid NOT NULL REFERENCES auth.users(id)</span>,
-  content       <span class="type">text NOT NULL CHECK (length(content) &lt;= 100)</span>,
-  status        <span class="type">text DEFAULT</span> <span class="str">'visible'</span>,  <span class="cmt">-- visible | hidden</span>
+  author_id     <span class="type">uuid NOT NULL REFERENCES auth.users(id)</span>,  <span class="cmt">-- 카카오 로그인 유저</span>
+  content       <span class="type">text NOT NULL CHECK (length(content) &lt;= 100)</span>,  <span class="cmt">-- 한 줄</span>
+  status        <span class="type">text DEFAULT</span> <span class="str">'visible'</span>,
   report_count  <span class="type">int DEFAULT 0</span>,
   created_at    <span class="type">timestamptz DEFAULT now()</span>
 );
 <span class="kw">CREATE INDEX</span> ON <span class="fn">review</span> (center_id, status, created_at <span class="kw">DESC</span>);
 
-<span class="cmt">-- 조인 테이블 (다대다)</span>
+<span class="cmt">-- 5. 조인 테이블 (다대다)</span>
 <span class="kw">CREATE TABLE</span> <span class="fn">center_tag</span> (
   center_id  <span class="type">bigint REFERENCES center(id) ON DELETE CASCADE</span>,
   tag_id     <span class="type">bigint REFERENCES tag(id)</span>,
   <span class="kw">PRIMARY KEY</span> (center_id, tag_id)
 );
-
 <span class="kw">CREATE TABLE</span> <span class="fn">review_tag</span> (
   review_id  <span class="type">bigint REFERENCES review(id) ON DELETE CASCADE</span>,
   tag_id     <span class="type">bigint REFERENCES tag(id)</span>,
   <span class="kw">PRIMARY KEY</span> (review_id, tag_id)
 );
 
-<span class="cmt">-- 감사 로그 (운영자 변경 추적)</span>
+<span class="cmt">-- 6. 신고 상세 — 관리자 검토용</span>
+<span class="kw">CREATE TABLE</span> <span class="fn">review_report</span> (
+  id           <span class="type">bigserial PRIMARY KEY</span>,
+  review_id    <span class="type">bigint NOT NULL REFERENCES review(id)</span>,
+  reporter_id  <span class="type">uuid NOT NULL</span>,
+  reason       <span class="type">text NOT NULL</span>,
+  resolved     <span class="type">boolean DEFAULT false</span>,
+  created_at   <span class="type">timestamptz DEFAULT now()</span>
+);
+
+<span class="cmt">-- 7. 감사 로그 — "누가 언제 뭘 수정했는지 자동 기록"</span>
 <span class="kw">CREATE TABLE</span> <span class="fn">audit_log</span> (
   id          <span class="type">bigserial PRIMARY KEY</span>,
   actor_id    <span class="type">uuid NOT NULL</span>,
-  entity      <span class="type">text NOT NULL</span>,      <span class="cmt">-- center | review | tag | region</span>
+  entity      <span class="type">text NOT NULL</span>,
   entity_id   <span class="type">bigint NOT NULL</span>,
-  action      <span class="type">text NOT NULL</span>,      <span class="cmt">-- create | update | delete | hide</span>
+  action      <span class="type">text NOT NULL</span>,
   diff        <span class="type">jsonb</span>,
   created_at  <span class="type">timestamptz DEFAULT now()</span>
 );</div>
@@ -454,16 +589,12 @@
 
 <!-- Footer -->
 <footer class="border-t border-slate-200 bg-white">
-  <div class="max-w-[1100px] mx-auto px-6 py-8 flex items-center justify-between text-[11px] text-slate-500">
-    <div>
-      발달센터 후기 앱 MVP · 데이터 구조 설계안 · 2026.04.23
-    </div>
-    <div class="flex items-center gap-3">
-      <span>Flutter</span>
-      <span>·</span>
-      <span>Supabase (PostgreSQL)</span>
-      <span>·</span>
-      <span>Next.js</span>
+  <div class="max-w-[1100px] mx-auto px-6 py-8 text-[11px] text-slate-500 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+    <div>발달센터 후기 앱 MVP · Q1·Q2 설계 응답 · 2026.04.23</div>
+    <div class="flex items-center gap-2">
+      <span>Flutter</span><span>·</span>
+      <span>Supabase (PostgreSQL)</span><span>·</span>
+      <span>Next.js 관리자</span>
     </div>
   </div>
 </footer>
