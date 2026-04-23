@@ -27,7 +27,7 @@
     .erd-container { background: #ffffff; border-radius: 12px; padding: 20px; min-height: 320px; }
     .erd-container svg { max-width: 100%; height: auto; }
 
-    /* Device mockup wrappers — keep fixed sized areas */
+    /* Device mockup wrappers — fixed sized areas */
     .device-phone-wrap {
       width: 300px;
       height: 650px;
@@ -42,7 +42,7 @@
       transform-origin: 0 0;
     }
     .device-phone-wrap .screen-content {
-      padding: 24px 14px 14px;
+      padding: 40px 14px 14px;
       font-size: 12px;
       line-height: 1.5;
       color: #0f172a;
@@ -91,7 +91,7 @@
     .admin-sidebar .nav-item { padding: 7px 10px; border-radius: 6px; margin: 1px 0; cursor: pointer; display: flex; align-items: center; gap: 8px; }
     .admin-sidebar .nav-item.active { background: #1e293b; color: white; }
     .admin-sidebar .nav-item:hover { background: #1e293b; color: white; }
-    .admin-main { padding: 14px 18px; background: white; }
+    .admin-main { padding: 14px 18px; background: white; overflow: hidden; }
     .admin-h1 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
     .admin-sub { font-size: 11px; color: #64748b; margin-bottom: 12px; }
     .admin-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
@@ -349,16 +349,8 @@ flowchart LR
             <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
             <div class="flex items-center justify-between mb-3">
               <div class="font-bold text-[13px]">센터 찾기</div>
-              <div class="text-[18px]">👤
-              </div>
+              <div class="text-[18px]">👤</div>
             </div>
-            <div class="device-stripe"></div>
-            <div class="device-header"></div>
-            <div class="device-sensors"></div>
-            <div class="device-btns"></div>
-            <div class="device-power"></div>
-          </div>
-        </div>
             <div class="phone-tab flex items-center justify-between cursor-pointer">
               <div><span class="chip-sm chip-cat">지역</span> <span class="font-semibold">서울 · 양천구</span></div>
               <span class="text-slate-400">▾</span>
@@ -382,6 +374,14 @@ flowchart LR
               </div>
               <div class="text-[10px] text-slate-400 mt-1">💬 후기 18</div>
             </div>
+          
+              </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
           </div>
         </div>
       </div>
@@ -421,16 +421,8 @@ flowchart LR
               <div class="mt-1.5">
                 <span class="chip-sm chip-cat">언어치료</span>
                 <span class="chip-sm chip-cat">놀이치료</span>
-              
               </div>
             </div>
-            <div class="device-stripe"></div>
-            <div class="device-header"></div>
-            <div class="device-sensors"></div>
-            <div class="device-btns"></div>
-            <div class="device-power"></div>
-          </div>
-        </div>
             <div class="phone-tab">
               <div class="font-semibold text-[12px]">🏥 새싹아동발달</div>
               <div class="text-[10px] text-slate-500 mt-0.5">신정동</div>
@@ -439,6 +431,14 @@ flowchart LR
                 <span class="chip-sm chip-cat">놀이치료</span>
               </div>
             </div>
+          
+              </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
           </div>
         </div>
       </div>
@@ -469,16 +469,8 @@ flowchart LR
             <div class="phone-tab">
               <div class="flex items-center justify-between mb-2">
                 <div class="font-semibold text-[12px]">💬 후기 요약</div>
-                <div class="text-[10px] text-slate-500">24개
+                <div class="text-[10px] text-slate-500">24개</div>
               </div>
-            </div>
-            <div class="device-stripe"></div>
-            <div class="device-header"></div>
-            <div class="device-sensors"></div>
-            <div class="device-btns"></div>
-            <div class="device-power"></div>
-          </div>
-        </div>
               <div class="text-[10.5px] text-slate-500 mb-1.5">인기 태그</div>
               <div>
                 <span class="chip-sm">친절한 선생님 ×18</span>
@@ -496,6 +488,14 @@ flowchart LR
               <div class="text-[9.5px] text-slate-400 mt-1">깔끔한 시설 · 3일 전</div>
             </div>
             <div class="btn-mock btn-outline-mock mt-2">후기 전체 보기 →</div>
+          
+              </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
           </div>
         </div>
       </div>
@@ -521,16 +521,8 @@ flowchart LR
             <div class="phone-tab">
               <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
               <div class="mt-1"><span class="chip-sm chip-cat">친절한 선생님</span></div>
-              <div class="text-[9.5px] text-slate-400 mt-1">2일 전
-              </div>
+              <div class="text-[9.5px] text-slate-400 mt-1">2일 전</div>
             </div>
-            <div class="device-stripe"></div>
-            <div class="device-header"></div>
-            <div class="device-sensors"></div>
-            <div class="device-btns"></div>
-            <div class="device-power"></div>
-          </div>
-        </div>
             <div class="phone-tab">
               <div class="text-[11.5px]">"주차가 편해서 다니기 좋아요"</div>
               <div class="mt-1"><span class="chip-sm chip-cat">주차 편리</span></div>
@@ -542,6 +534,14 @@ flowchart LR
               <div class="text-[9.5px] text-slate-400 mt-1">5일 전</div>
             </div>
             <div class="text-center text-[10px] text-slate-400 mt-2">⋯ 아래로 더 불러오는 중</div>
+          
+              </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
           </div>
         </div>
       </div>
@@ -566,16 +566,8 @@ flowchart LR
             <div class="text-[10.5px] text-slate-500 mb-1.5">한 줄 후기</div>
             <div class="phone-tab" style="background:#fafafa">
               <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
-              <div class="text-[9.5px] text-slate-400 text-right mt-1">16/100
-              </div>
+              <div class="text-[9.5px] text-slate-400 text-right mt-1">16/100</div>
             </div>
-            <div class="device-stripe"></div>
-            <div class="device-header"></div>
-            <div class="device-sensors"></div>
-            <div class="device-btns"></div>
-            <div class="device-power"></div>
-          </div>
-        </div>
             <div class="text-[10.5px] text-slate-500 mt-3 mb-1.5">치료 유형 <span class="text-slate-400">(1개)</span></div>
             <div class="flex flex-wrap">
               <span class="chip-sm chip-selected">언어치료 ✓</span>
@@ -590,6 +582,14 @@ flowchart LR
               <span class="chip-sm">아이가 좋아함</span>
             </div>
             <div class="btn-mock btn-primary-mock mt-4">후기 등록</div>
+          
+              </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
           </div>
         </div>
       </div>
@@ -620,7 +620,9 @@ flowchart LR
                 자유롭게 보실 수 있어요.
               </div>
               <div class="btn-mock">💛 카카오로 3초 만에 시작</div>
-              <div class="text-[10px] text-slate-400 mt-3">나중에 할게요
+              <div class="text-[10px] text-slate-400 mt-3">나중에 할게요</div>
+            </div>
+          
               </div>
             </div>
             <div class="device-stripe"></div>
@@ -628,8 +630,6 @@ flowchart LR
             <div class="device-sensors"></div>
             <div class="device-btns"></div>
             <div class="device-power"></div>
-          </div>
-        </div>
           </div>
         </div>
       </div>
@@ -660,7 +660,11 @@ flowchart LR
                   <span class="chip-sm" style="background:rgba(255,255,255,0.6)">친절한 선생님</span>
                   <span class="chip-sm" style="background:rgba(255,255,255,0.6)">주차 편리</span>
                 </div>
-                <div class="text-[10px] font-semibold">앱에서 자세히 보기 →
+                <div class="text-[10px] font-semibold">앱에서 자세히 보기 →</div>
+              </div>
+              <div class="text-[9px] text-slate-400 text-right mt-1.5">오후 2:14</div>
+            </div>
+          
               </div>
             </div>
             <div class="device-stripe"></div>
@@ -668,10 +672,6 @@ flowchart LR
             <div class="device-sensors"></div>
             <div class="device-btns"></div>
             <div class="device-power"></div>
-          </div>
-        </div>
-              <div class="text-[9px] text-slate-400 text-right mt-1.5">오후 2:14</div>
-            </div>
           </div>
         </div>
       </div>
@@ -697,7 +697,11 @@ flowchart LR
             <div class="text-[10.5px] text-slate-500 mb-3">📍 서울 양천구 목1동 123-45</div>
             <div style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-radius:12px;height:140px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:30px;">📍</div>
-              <div style="position:absolute;bottom:8px;right:8px;background:white;padding:3px 8px;border-radius:999px;font-size:9px;font-weight:700;color:#047857;">지도 미리보기
+              <div style="position:absolute;bottom:8px;right:8px;background:white;padding:3px 8px;border-radius:999px;font-size:9px;font-weight:700;color:#047857;">지도 미리보기</div>
+            </div>
+            <div class="btn-mock btn-primary-mock mt-3" style="background:#03c75a;color:white;">🗺️ 네이버 지도로 보기</div>
+            <div class="text-[10px] text-slate-400 mt-2 text-center">좌표가 저장되어 나중에 앱 안 지도로 전환 가능</div>
+          
               </div>
             </div>
             <div class="device-stripe"></div>
@@ -707,16 +711,12 @@ flowchart LR
             <div class="device-power"></div>
           </div>
         </div>
-            <div class="btn-mock btn-primary-mock mt-3" style="background:#03c75a;color:white;">🗺️ 네이버 지도로 보기</div>
-            <div class="text-[10px] text-slate-400 mt-2 text-center">좌표가 저장되어 나중에 앱 안 지도로 전환 가능</div>
-          </div>
-        </div>
       </div>
 
     </div>
   </div>
 
-  <!-- 3. Admin page - 5 browser mockups -->
+<!-- 3. Admin page - 5 browser mockups -->
   <div class="panel p-6 mb-5">
     <h3 class="text-[15px] font-bold mb-1">관리자 페이지 — 운영자가 실제로 할 수 있는 일</h3>
     <p class="text-[12.5px] text-slate-600 mb-6">
@@ -957,6 +957,8 @@ flowchart LR
 
     </div>
   </div>
+
+  
 
   <!-- 4. Future-proof: plain language -->
   <div class="panel p-6">
