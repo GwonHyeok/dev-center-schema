@@ -6,6 +6,7 @@
   <title>발달센터 후기 앱 — 설계 제안 응답</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devices.css@0.1.15/dist/devices.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -26,34 +27,86 @@
     .erd-container { background: #ffffff; border-radius: 12px; padding: 20px; min-height: 320px; }
     .erd-container svg { max-width: 100%; height: auto; }
 
-    /* Phone mockup */
-    .phone {
-      background: #0f172a;
-      border-radius: 36px;
-      padding: 8px;
-      max-width: 300px;
+    /* Device mockup wrappers — keep fixed sized areas */
+    .device-phone-wrap {
+      width: 300px;
+      height: 650px;
+      position: relative;
       margin: 0 auto;
-      box-shadow: 0 20px 40px -10px rgba(15,23,42,0.25), 0 2px 8px rgba(15,23,42,0.1);
     }
-    .phone-screen {
-      background: #f8fafc;
-      border-radius: 28px;
-      padding: 18px 14px;
-      min-height: 420px;
+    .device-phone-wrap .device {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: scale(0.8);
+      transform-origin: 0 0;
+    }
+    .device-phone-wrap .screen-content {
+      padding: 24px 14px 14px;
       font-size: 12px;
       line-height: 1.5;
       color: #0f172a;
+      background: #f8fafc;
+      height: 100%;
       overflow: hidden;
-      position: relative;
     }
-    .phone-notch {
-      height: 22px;
-      background: #0f172a;
-      border-radius: 0 0 14px 14px;
-      width: 100px;
-      margin: -18px auto 14px;
-      position: relative;
+    .device-phone-wrap .device-iphone-x .device-frame { background: #0b0f1a; }
+
+    /* Browser frame for admin mockups */
+    .browser {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -10px rgba(15,23,42,0.15), 0 2px 8px rgba(15,23,42,0.05);
+      border: 1px solid #e2e8f0;
+      max-width: 720px;
+      margin: 0 auto;
     }
+    .browser-chrome {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .browser-dots { display: flex; gap: 6px; }
+    .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .browser-dot.red { background: #ef4444; }
+    .browser-dot.yellow { background: #eab308; }
+    .browser-dot.green { background: #22c55e; }
+    .browser-url {
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 11px;
+      color: #475569;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .browser-viewport { padding: 0; min-height: 340px; background: white; }
+    .admin-layout { display: grid; grid-template-columns: 160px 1fr; min-height: 340px; }
+    .admin-sidebar { background: #0f172a; color: #cbd5e1; padding: 14px 10px; font-size: 11.5px; }
+    .admin-sidebar .nav-title { color: #64748b; text-transform: uppercase; font-size: 9px; font-weight: 700; letter-spacing: 0.05em; padding: 8px 10px 4px; }
+    .admin-sidebar .nav-item { padding: 7px 10px; border-radius: 6px; margin: 1px 0; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .admin-sidebar .nav-item.active { background: #1e293b; color: white; }
+    .admin-sidebar .nav-item:hover { background: #1e293b; color: white; }
+    .admin-main { padding: 14px 18px; background: white; }
+    .admin-h1 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .admin-sub { font-size: 11px; color: #64748b; margin-bottom: 12px; }
+    .admin-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .admin-table th { text-align: left; padding: 8px 10px; background: #f8fafc; font-weight: 600; color: #475569; border-bottom: 1px solid #e2e8f0; font-size: 10px; text-transform: uppercase; letter-spacing: 0.03em; }
+    .admin-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; }
+    .admin-table tr:hover td { background: #f8fafc; }
+    .admin-btn { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid #e2e8f0; background: white; color: #0f172a; cursor: pointer; }
+    .admin-btn-primary { background: #0f172a; color: white; border-color: #0f172a; }
+    .admin-btn-danger { color: #dc2626; border-color: #fecaca; }
+    .admin-btn-success { background: #dcfce7; color: #15803d; border-color: #86efac; }
+    .admin-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+    .pill-ok { background: #dcfce7; color: #166534; }
+    .pill-wait { background: #fef3c7; color: #92400e; }
+    .pill-danger { background: #fee2e2; color: #991b1b; }
     .phone-tab {
       background: white;
       border: 1px solid #e2e8f0;
@@ -288,14 +341,24 @@ flowchart LR
             잊지 않게 합니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content">
+
             <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
             <div class="flex items-center justify-between mb-3">
               <div class="font-bold text-[13px]">센터 찾기</div>
-              <div class="text-[18px]">👤</div>
+              <div class="text-[18px]">👤
+              </div>
             </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
             <div class="phone-tab flex items-center justify-between cursor-pointer">
               <div><span class="chip-sm chip-cat">지역</span> <span class="font-semibold">서울 · 양천구</span></div>
               <span class="text-slate-400">▾</span>
@@ -334,9 +397,11 @@ flowchart LR
             필터를 복수 선택하면 '모두 포함' 조건으로 좁혀집니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content">
+
             <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
             <div class="phone-tab flex items-center gap-2">
               <span class="text-slate-400">🔍</span>
@@ -356,8 +421,16 @@ flowchart LR
               <div class="mt-1.5">
                 <span class="chip-sm chip-cat">언어치료</span>
                 <span class="chip-sm chip-cat">놀이치료</span>
+              
               </div>
             </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
             <div class="phone-tab">
               <div class="font-semibold text-[12px]">🏥 새싹아동발달</div>
               <div class="text-[10px] text-slate-500 mt-0.5">신정동</div>
@@ -381,9 +454,11 @@ flowchart LR
             후기가 수천 개 쌓여도 로딩 속도가 처음과 같습니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content">
+
             <div class="status-bar"><span>← 뒤로</span><span>🔗 공유</span></div>
             <div class="font-bold text-[14px]">아이사랑발달센터</div>
             <div class="text-[10.5px] text-slate-500 mt-0.5">📍 서울 양천구 목동 · 📞 02-2***-****</div>
@@ -394,8 +469,16 @@ flowchart LR
             <div class="phone-tab">
               <div class="flex items-center justify-between mb-2">
                 <div class="font-semibold text-[12px]">💬 후기 요약</div>
-                <div class="text-[10px] text-slate-500">24개</div>
+                <div class="text-[10px] text-slate-500">24개
               </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
               <div class="text-[10.5px] text-slate-500 mb-1.5">인기 태그</div>
               <div>
                 <span class="chip-sm">친절한 선생님 ×18</span>
@@ -428,16 +511,26 @@ flowchart LR
             신고가 들어온 후기는 자동 숨김 처리되어 사용자에게 보이지 않습니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content">
+
             <div class="status-bar"><span>← 뒤로</span><span>아이사랑발달센터</span></div>
             <div class="font-bold text-[13px] mb-3">전체 후기 (24)</div>
             <div class="phone-tab">
               <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
               <div class="mt-1"><span class="chip-sm chip-cat">친절한 선생님</span></div>
-              <div class="text-[9.5px] text-slate-400 mt-1">2일 전</div>
+              <div class="text-[9.5px] text-slate-400 mt-1">2일 전
+              </div>
             </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
             <div class="phone-tab">
               <div class="text-[11.5px]">"주차가 편해서 다니기 좋아요"</div>
               <div class="mt-1"><span class="chip-sm chip-cat">주차 편리</span></div>
@@ -464,15 +557,25 @@ flowchart LR
             카테고리별로 태그가 묶여 있어 선택이 직관적입니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content">
+
             <div class="status-bar"><span>✕ 닫기</span><span>후기 작성</span></div>
             <div class="text-[10.5px] text-slate-500 mb-1.5">한 줄 후기</div>
             <div class="phone-tab" style="background:#fafafa">
               <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
-              <div class="text-[9.5px] text-slate-400 text-right mt-1">16/100</div>
+              <div class="text-[9.5px] text-slate-400 text-right mt-1">16/100
+              </div>
             </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
             <div class="text-[10.5px] text-slate-500 mt-3 mb-1.5">치료 유형 <span class="text-slate-400">(1개)</span></div>
             <div class="flex flex-wrap">
               <span class="chip-sm chip-selected">언어치료 ✓</span>
@@ -503,9 +606,11 @@ flowchart LR
             후기 쓸 때만 잠깐 로그인하게 됩니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen" style="display:flex;flex-direction:column;justify-content:center;">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content" style="display:flex;flex-direction:column;justify-content:center;">
+
             <div style="text-align:center;padding:20px 8px;">
               <div style="font-size:36px;margin-bottom:6px;">💬</div>
               <div class="font-bold text-[14px] mb-1">후기 작성하려면</div>
@@ -515,8 +620,16 @@ flowchart LR
                 자유롭게 보실 수 있어요.
               </div>
               <div class="btn-mock">💛 카카오로 3초 만에 시작</div>
-              <div class="text-[10px] text-slate-400 mt-3">나중에 할게요</div>
+              <div class="text-[10px] text-slate-400 mt-3">나중에 할게요
+              </div>
             </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -532,9 +645,11 @@ flowchart LR
             실제로 자연스럽게 일어나도록 카드 디자인을 깔끔하게 가져갑니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen" style="background:#abc1d1">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content" style="background:#abc1d1">
+
             <div class="text-[10.5px] text-slate-700 mb-2 font-semibold">카카오톡 · 엄마들 채팅방</div>
             <div style="background:white;border-radius:14px;padding:10px;max-width:90%;margin-left:auto;">
               <div class="text-[11px] text-slate-700 mb-2">여기 한번 가보세요!</div>
@@ -545,8 +660,16 @@ flowchart LR
                   <span class="chip-sm" style="background:rgba(255,255,255,0.6)">친절한 선생님</span>
                   <span class="chip-sm" style="background:rgba(255,255,255,0.6)">주차 편리</span>
                 </div>
-                <div class="text-[10px] font-semibold">앱에서 자세히 보기 →</div>
+                <div class="text-[10px] font-semibold">앱에서 자세히 보기 →
               </div>
+            </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
               <div class="text-[9px] text-slate-400 text-right mt-1.5">오후 2:14</div>
             </div>
           </div>
@@ -564,16 +687,26 @@ flowchart LR
             넘어갈 때 바로 준비가 되어 있습니다.
           </div>
         </div>
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-notch"></div>
+        <div class="device-phone-wrap">
+          <div class="device device-iphone-x">
+            <div class="device-frame">
+              <div class="screen-content">
+
             <div class="status-bar"><span>← 뒤로</span><span>위치 정보</span></div>
             <div class="font-bold text-[13px] mb-1">아이사랑발달센터</div>
             <div class="text-[10.5px] text-slate-500 mb-3">📍 서울 양천구 목1동 123-45</div>
             <div style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-radius:12px;height:140px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:30px;">📍</div>
-              <div style="position:absolute;bottom:8px;right:8px;background:white;padding:3px 8px;border-radius:999px;font-size:9px;font-weight:700;color:#047857;">지도 미리보기</div>
+              <div style="position:absolute;bottom:8px;right:8px;background:white;padding:3px 8px;border-radius:999px;font-size:9px;font-weight:700;color:#047857;">지도 미리보기
+              </div>
             </div>
+            <div class="device-stripe"></div>
+            <div class="device-header"></div>
+            <div class="device-sensors"></div>
+            <div class="device-btns"></div>
+            <div class="device-power"></div>
+          </div>
+        </div>
             <div class="btn-mock btn-primary-mock mt-3" style="background:#03c75a;color:white;">🗺️ 네이버 지도로 보기</div>
             <div class="text-[10px] text-slate-400 mt-2 text-center">좌표가 저장되어 나중에 앱 안 지도로 전환 가능</div>
           </div>
@@ -583,70 +716,245 @@ flowchart LR
     </div>
   </div>
 
-  <!-- 3. Admin page - 5 daily tasks -->
+  <!-- 3. Admin page - 5 browser mockups -->
   <div class="panel p-6 mb-5">
     <h3 class="text-[15px] font-bold mb-1">관리자 페이지 — 운영자가 실제로 할 수 있는 일</h3>
-    <p class="text-[12.5px] text-slate-600 mb-5">
-      의뢰서에 '운영자가 관리자 페이지에서 직접 관리'라고 하셔서, 페이지를 열어 하루 안에
-      할 수 있는 작업 5가지를 기준으로 구성했습니다.
+    <p class="text-[12.5px] text-slate-600 mb-6">
+      의뢰서에 '운영자가 관리자 페이지에서 직접 관리'라고 하셔서, 페이지를 열어 하루 안에 할 수 있는 작업 5가지를 각각 실제 웹 화면 모형으로 보여드립니다.
     </p>
 
-    <div class="space-y-4">
-      <div class="bg-pink-50 rounded-lg p-4 border border-pink-100">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 rounded-full bg-pink-500 text-white font-bold flex items-center justify-center text-[11px]">1</div>
-          <strong class="text-[13px]">새 센터 추가</strong>
+    <div class="space-y-10">
+
+      <!-- Admin 1: CSV 업로드 + 센터 추가 -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-full bg-pink-500 text-white font-bold flex items-center justify-center text-[12px]">1</div>
+          <strong class="text-[14px]">새 센터 추가 (수동 입력 + CSV 일괄 업로드)</strong>
         </div>
-        <p class="text-[12.5px] text-slate-700 ml-8">
-          한 건씩 직접 입력하거나, <strong>엑셀(CSV) 파일로 수십 개를 한 번에 올릴 수 있어요.</strong>
+        <p class="text-[12.5px] text-slate-600 mb-3 ml-9">
+          한 건씩 직접 입력하거나, <strong>엑셀(CSV) 파일로 수십 개를 한 번에</strong> 올릴 수 있습니다.
           초기 시범 지역 센터 30~50곳을 빠르게 채워 넣을 때 필수 기능입니다.
         </p>
+        <div class="browser">
+          <div class="browser-chrome">
+            <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+            <div class="browser-url">admin.dev-center.app/centers</div>
+          </div>
+          <div class="browser-viewport">
+            <div class="admin-layout">
+              <div class="admin-sidebar">
+                <div class="nav-title">메뉴</div>
+                <div class="nav-item active">🏥 센터</div>
+                <div class="nav-item">📍 지역</div>
+                <div class="nav-item">🏷️ 태그</div>
+                <div class="nav-item">💬 후기</div>
+                <div class="nav-item">📜 변경 이력</div>
+              </div>
+              <div class="admin-main">
+                <div class="admin-h1">센터 관리</div>
+                <div class="admin-sub">등록된 센터 24곳 · 오늘 신규 3건</div>
+                <div class="admin-toolbar">
+                  <button class="admin-btn admin-btn-primary">+ 센터 추가</button>
+                  <button class="admin-btn">📂 CSV 일괄 업로드</button>
+                  <div style="margin-left:auto;font-size:11px;color:#64748b;">🔍 검색</div>
+                </div>
+                <table class="admin-table">
+                  <thead><tr><th>이름</th><th>지역</th><th>후기</th><th>상태</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td>아이사랑발달센터</td><td>양천구 목동</td><td>24</td><td><span class="admin-pill pill-ok">공개</span></td><td><button class="admin-btn">수정</button></td></tr>
+                    <tr><td>행복한놀이치료실</td><td>양천구 신정동</td><td>18</td><td><span class="admin-pill pill-ok">공개</span></td><td><button class="admin-btn">수정</button></td></tr>
+                    <tr><td>새싹아동발달</td><td>양천구 신정동</td><td>11</td><td><span class="admin-pill pill-wait">검토중</span></td><td><button class="admin-btn">수정</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-sky-50 rounded-lg p-4 border border-sky-100">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 rounded-full bg-sky-500 text-white font-bold flex items-center justify-center text-[11px]">2</div>
-          <strong class="text-[13px]">지역 관리</strong>
+      <!-- Admin 2: 지역 트리 -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-full bg-sky-500 text-white font-bold flex items-center justify-center text-[12px]">2</div>
+          <strong class="text-[14px]">지역 관리 (트리 뷰 + 누락 지역 표시)</strong>
         </div>
-        <p class="text-[12.5px] text-slate-700 ml-8">
-          서울시 → 양천구 → 목동처럼 트리 모양으로 보여요. 센터가 0개인 지역은 색으로
-          표시돼 '여기 빨리 채워야겠다'를 한눈에 파악할 수 있습니다.
+        <p class="text-[12.5px] text-slate-600 mb-3 ml-9">
+          서울시 → 양천구 → 목동처럼 트리 모양. <strong>센터가 0개인 지역은 색으로 표시</strong>돼
+          '여기 빨리 채워야겠다'를 한눈에 파악할 수 있습니다.
         </p>
+        <div class="browser">
+          <div class="browser-chrome">
+            <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+            <div class="browser-url">admin.dev-center.app/regions</div>
+          </div>
+          <div class="browser-viewport">
+            <div class="admin-layout">
+              <div class="admin-sidebar">
+                <div class="nav-title">메뉴</div>
+                <div class="nav-item">🏥 센터</div>
+                <div class="nav-item active">📍 지역</div>
+                <div class="nav-item">🏷️ 태그</div>
+                <div class="nav-item">💬 후기</div>
+                <div class="nav-item">📜 변경 이력</div>
+              </div>
+              <div class="admin-main">
+                <div class="admin-h1">지역 트리</div>
+                <div class="admin-sub">센터 0개인 지역은 <span style="color:#dc2626;font-weight:700">빨간색</span>으로 표시됩니다</div>
+                <div class="admin-toolbar">
+                  <button class="admin-btn admin-btn-primary">+ 새 지역 추가</button>
+                </div>
+                <div style="font-size:12px;font-family:'JetBrains Mono',monospace;line-height:2;">
+                  <div>📁 서울특별시 <span style="color:#64748b">(센터 42)</span></div>
+                  <div style="padding-left:20px;">├─ 📁 양천구 <span style="color:#64748b">(센터 24)</span></div>
+                  <div style="padding-left:40px;">│  ├─ 목동 <span style="color:#16a34a">(11)</span></div>
+                  <div style="padding-left:40px;">│  ├─ 신정동 <span style="color:#16a34a">(9)</span></div>
+                  <div style="padding-left:40px;">│  ├─ <span style="color:#dc2626;font-weight:700">신월동 (0) ⚠</span></div>
+                  <div style="padding-left:40px;">│  └─ <span style="color:#dc2626;font-weight:700">목1동 (0) ⚠</span></div>
+                  <div style="padding-left:20px;">├─ 📁 강남구 <span style="color:#64748b">(센터 12)</span></div>
+                  <div style="padding-left:20px;">└─ 📁 마포구 <span style="color:#64748b">(센터 6)</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-indigo-50 rounded-lg p-4 border border-indigo-100">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 rounded-full bg-indigo-500 text-white font-bold flex items-center justify-center text-[11px]">3</div>
-          <strong class="text-[13px]">태그 관리</strong>
+      <!-- Admin 3: 태그 관리 (동의어 통합) -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-full bg-indigo-500 text-white font-bold flex items-center justify-center text-[12px]">3</div>
+          <strong class="text-[14px]">태그 관리 (동의어 통합)</strong>
         </div>
-        <p class="text-[12.5px] text-slate-700 ml-8">
-          치료 유형·강점·환경 등 카테고리별로 태그를 묶어둡니다. 예를 들어
-          <strong>'언어치료'와 '언어발달'처럼 뜻이 같은 태그는 하나로 통합</strong>해서
-          검색 결과가 흩어지지 않게 합니다.
+        <p class="text-[12.5px] text-slate-600 mb-3 ml-9">
+          치료 유형·강점·환경 등 카테고리별 관리. <strong>'언어치료'와 '언어발달'처럼 뜻이 같은
+          태그는 하나로 통합</strong>해서 검색 결과가 흩어지지 않게 합니다.
         </p>
+        <div class="browser">
+          <div class="browser-chrome">
+            <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+            <div class="browser-url">admin.dev-center.app/tags</div>
+          </div>
+          <div class="browser-viewport">
+            <div class="admin-layout">
+              <div class="admin-sidebar">
+                <div class="nav-title">메뉴</div>
+                <div class="nav-item">🏥 센터</div>
+                <div class="nav-item">📍 지역</div>
+                <div class="nav-item active">🏷️ 태그</div>
+                <div class="nav-item">💬 후기</div>
+                <div class="nav-item">📜 변경 이력</div>
+              </div>
+              <div class="admin-main">
+                <div class="admin-h1">태그 관리</div>
+                <div class="admin-sub">카테고리별 태그 · 동의어 통합 가능</div>
+                <div class="admin-toolbar">
+                  <button class="admin-btn admin-btn-primary">+ 태그 추가</button>
+                </div>
+                <table class="admin-table">
+                  <thead><tr><th>태그</th><th>카테고리</th><th>동의어</th><th>사용</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="chip-sm chip-cat">언어치료</span></td><td>치료 유형</td><td style="font-size:10px;color:#64748b;">언어발달, 스피치</td><td>42</td><td><button class="admin-btn">편집</button></td></tr>
+                    <tr><td><span class="chip-sm chip-cat">감각통합</span></td><td>치료 유형</td><td style="font-size:10px;color:#64748b;">SI치료</td><td>28</td><td><button class="admin-btn">편집</button></td></tr>
+                    <tr><td><span class="chip-sm">친절한 선생님</span></td><td>강점</td><td style="font-size:10px;color:#64748b;">—</td><td>67</td><td><button class="admin-btn">편집</button></td></tr>
+                    <tr><td><span class="chip-sm">주차 편리</span></td><td>환경</td><td style="font-size:10px;color:#64748b;">주차 가능</td><td>19</td><td><button class="admin-btn">편집</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-[11px]">4</div>
-          <strong class="text-[13px]">후기 검토</strong>
+      <!-- Admin 4: 후기 검토 -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-[12px]">4</div>
+          <strong class="text-[14px]">후기 검토 (신고 처리)</strong>
         </div>
-        <p class="text-[12.5px] text-slate-700 ml-8">
-          신고가 들어온 후기는 목록 상단에 뜨고, <strong>숨김/복원을 클릭 한 번으로</strong>
-          처리합니다. 어떤 후기가 자주 신고되는지 패턴도 자동 집계.
+        <p class="text-[12.5px] text-slate-600 mb-3 ml-9">
+          신고가 들어온 후기는 목록 상단에 뜨고, <strong>숨김/복원을 클릭 한 번</strong>으로 처리.
+          어떤 후기가 자주 신고되는지 패턴도 자동 집계.
         </p>
+        <div class="browser">
+          <div class="browser-chrome">
+            <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+            <div class="browser-url">admin.dev-center.app/reviews?filter=reported</div>
+          </div>
+          <div class="browser-viewport">
+            <div class="admin-layout">
+              <div class="admin-sidebar">
+                <div class="nav-title">메뉴</div>
+                <div class="nav-item">🏥 센터</div>
+                <div class="nav-item">📍 지역</div>
+                <div class="nav-item">🏷️ 태그</div>
+                <div class="nav-item active">💬 후기</div>
+                <div class="nav-item">📜 변경 이력</div>
+              </div>
+              <div class="admin-main">
+                <div class="admin-h1">후기 검토</div>
+                <div class="admin-sub">신고 3건 · 대기 중</div>
+                <div class="admin-toolbar">
+                  <button class="admin-btn admin-btn-primary">🚩 신고된 후기 (3)</button>
+                  <button class="admin-btn">전체 후기</button>
+                </div>
+                <table class="admin-table">
+                  <thead><tr><th>후기</th><th>센터</th><th>신고</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td style="max-width:220px;">"선생님이 자꾸 바뀌어요..."</td><td>행복한놀이</td><td><span class="admin-pill pill-danger">신고 3</span></td><td><button class="admin-btn admin-btn-danger">숨김</button> <button class="admin-btn admin-btn-success">유지</button></td></tr>
+                    <tr><td style="max-width:220px;">"시설이 좁아서 불편..."</td><td>새싹아동발달</td><td><span class="admin-pill pill-danger">신고 2</span></td><td><button class="admin-btn admin-btn-danger">숨김</button> <button class="admin-btn admin-btn-success">유지</button></td></tr>
+                    <tr><td style="max-width:220px;">"상담 예약이 어렵..."</td><td>아이사랑발달</td><td><span class="admin-pill pill-wait">신고 1</span></td><td><button class="admin-btn admin-btn-danger">숨김</button> <button class="admin-btn admin-btn-success">유지</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-amber-50 rounded-lg p-4 border border-amber-100">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-[11px]">5</div>
-          <strong class="text-[13px]">변경 이력 · 복원</strong>
+      <!-- Admin 5: 변경 이력 -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-[12px]">5</div>
+          <strong class="text-[14px]">변경 이력 · 복원</strong>
         </div>
-        <p class="text-[12.5px] text-slate-700 ml-8">
-          <strong>누가, 언제, 무엇을 수정했는지 자동 기록</strong>됩니다. 운영자가 여러 명으로
-          늘어나도 책임 추적이 되고, 실수로 지운 것도 되돌릴 수 있습니다.
+        <p class="text-[12.5px] text-slate-600 mb-3 ml-9">
+          <strong>누가, 언제, 무엇을 수정했는지 자동 기록</strong>. 운영자가 여러 명으로 늘어나도
+          책임 추적이 되고, 실수로 지운 것도 되돌릴 수 있습니다.
         </p>
+        <div class="browser">
+          <div class="browser-chrome">
+            <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+            <div class="browser-url">admin.dev-center.app/audit-log</div>
+          </div>
+          <div class="browser-viewport">
+            <div class="admin-layout">
+              <div class="admin-sidebar">
+                <div class="nav-title">메뉴</div>
+                <div class="nav-item">🏥 센터</div>
+                <div class="nav-item">📍 지역</div>
+                <div class="nav-item">🏷️ 태그</div>
+                <div class="nav-item">💬 후기</div>
+                <div class="nav-item active">📜 변경 이력</div>
+              </div>
+              <div class="admin-main">
+                <div class="admin-h1">변경 이력</div>
+                <div class="admin-sub">오늘 12건 · 이번 주 78건</div>
+                <table class="admin-table">
+                  <thead><tr><th>시간</th><th>운영자</th><th>작업</th><th>대상</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td style="font-family:'JetBrains Mono',monospace;">14:32</td><td>관리자A</td><td><span class="admin-pill pill-danger">삭제</span></td><td>후기 #842</td><td><button class="admin-btn admin-btn-success">↶ 복원</button></td></tr>
+                    <tr><td style="font-family:'JetBrains Mono',monospace;">14:18</td><td>관리자A</td><td><span class="admin-pill pill-wait">수정</span></td><td>센터 "아이사랑"</td><td><button class="admin-btn">이전 값 보기</button></td></tr>
+                    <tr><td style="font-family:'JetBrains Mono',monospace;">13:55</td><td>관리자B</td><td><span class="admin-pill pill-ok">생성</span></td><td>태그 "친환경 교구"</td><td></td></tr>
+                    <tr><td style="font-family:'JetBrains Mono',monospace;">13:40</td><td>관리자A</td><td><span class="admin-pill pill-danger">삭제</span></td><td>태그 "언어발달"</td><td><button class="admin-btn admin-btn-success">↶ 복원</button></td></tr>
+                    <tr><td style="font-family:'JetBrains Mono',monospace;">10:12</td><td>관리자B</td><td><span class="admin-pill pill-wait">수정</span></td><td>지역 "목1동"</td><td><button class="admin-btn">이전 값 보기</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
