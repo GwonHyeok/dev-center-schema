@@ -38,6 +38,35 @@
     .feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
     @media (max-width: 768px) { .feature-row { grid-template-columns: 1fr; } }
     .quote-box { background: #fefce8; border-left: 3px solid #ca8a04; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 12.5px; color: #713f12; line-height: 1.55; }
+
+    /* Interactive ERD */
+    .erd-wrap { position: relative; width: 100%; aspect-ratio: 11/7; max-width: 1040px; margin: 0 auto; }
+    .erd-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .erd-entity { position: absolute; background: white; border: 2px solid; border-radius: 12px; padding: 10px 14px; min-width: 132px; box-shadow: 0 6px 20px rgba(15,23,42,0.06); cursor: pointer; transition: all 0.2s ease; z-index: 2; }
+    .erd-entity:hover, .erd-entity.active { transform: translateY(-2px) scale(1.04); box-shadow: 0 12px 32px rgba(15,23,42,0.14); z-index: 10; }
+    .erd-entity .ent-title { font-size: 13px; font-weight: 700; color: #0f172a; }
+    .erd-entity .ent-sub { font-size: 10px; color: #64748b; margin-top: 2px; }
+    .erd-entity .ent-fields { font-size: 10.5px; font-family: 'JetBrains Mono', monospace; color: #475569; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f1f5f9; line-height: 1.7; }
+    .erd-line { stroke-width: 2; fill: none; transition: all 0.25s ease; }
+    .erd-line.dim { opacity: 0.15; }
+    .erd-line.on { opacity: 1; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(99,102,241,0.4)); }
+    .erd-line.nm { stroke-dasharray: 6 4; }
+    .erd-label { font-size: 11px; font-weight: 700; fill: #4338ca; pointer-events: none; user-select: none; }
+    .erd-label-bg { fill: white; stroke: #c7d2fe; stroke-width: 1; }
+    .erd-card-e { border-color: #0ea5e9; } /* sky */
+    .erd-card-c { border-color: #ec4899; } /* pink */
+    .erd-card-t { border-color: #6366f1; } /* indigo */
+    .erd-card-r { border-color: #10b981; } /* emerald */
+    .erd-card-u { border-color: #f59e0b; } /* amber */
+    .erd-card-p { border-color: #64748b; } /* slate */
+    .erd-card-a { border-color: #94a3b8; opacity: 0.9; } /* audit */
+    .erd-entity.dim { opacity: 0.3; }
+    .erd-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: #475569; }
+    .erd-legend-item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 999px; }
+    .rel-tag { display: inline-block; min-width: 18px; text-align: center; padding: 1px 6px; font-size: 10px; font-weight: 700; border-radius: 4px; }
+    .rel-1 { background: #e0e7ff; color: #4338ca; }
+    .rel-n { background: #fce7f3; color: #be185d; }
+    .rel-nm { background: #fef3c7; color: #b45309; }
   </style>
 </head>
 <body class="min-h-screen">
@@ -55,9 +84,9 @@
       </div>
     </div>
     <nav class="flex items-center gap-5 text-[12px] font-medium text-slate-600">
-      <a href="#q1" class="hover:text-slate-900">Q1 구조</a>
-      <a href="#q2" class="hover:text-slate-900">Q2 레퍼런스</a>
-      <a href="#sql" class="hover:text-slate-900">SQL</a>
+      <a href="#model" class="hover:text-slate-900">구조 한눈에</a>
+      <a href="#q1" class="hover:text-slate-900">기능별 설계</a>
+      <a href="#q2" class="hover:text-slate-900">레퍼런스</a>
     </nav>
   </div>
 </header>
@@ -101,6 +130,215 @@
   </div>
 </section>
 
+<!-- Interactive Model -->
+<section id="model" class="max-w-[1100px] mx-auto px-6 pb-14 anchor">
+  <div class="mb-6">
+    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">인터랙티브 모델</div>
+    <h2 class="text-[24px] font-bold">각 박스에 마우스를 올려 관계(1:1 · 1:n · n:m)를 확인</h2>
+    <p class="text-[13.5px] text-slate-600 mt-2">엔티티를 클릭·호버하면 연결된 테이블과 카디널리티(관계 수)가 강조됩니다.</p>
+  </div>
+
+  <div class="panel p-6">
+    <!-- Legend -->
+    <div class="erd-legend mb-5">
+      <span class="erd-legend-item"><span class="rel-tag rel-1">1</span> 한 쪽</span>
+      <span class="erd-legend-item"><span class="rel-tag rel-n">N</span> 여럿</span>
+      <span class="erd-legend-item"><span class="rel-tag rel-nm">N:M</span> 다대다 (조인 테이블 경유)</span>
+      <span class="erd-legend-item"><svg width="20" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#6366f1" stroke-width="2"/></svg> 직접 참조</span>
+      <span class="erd-legend-item"><svg width="20" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#6366f1" stroke-width="2" stroke-dasharray="4 3"/></svg> 다대다</span>
+    </div>
+
+    <!-- Canvas -->
+    <div class="erd-wrap" id="erd-canvas">
+      <!-- SVG Lines (below cards) -->
+      <svg class="erd-svg" viewBox="0 0 1100 700" preserveAspectRatio="xMidYMid meet">
+        <!-- Region → Region (self, 1:n parent-child) -->
+        <path class="erd-line" id="line-region-self" data-rel="region" d="M 220 105 C 280 85, 280 145, 220 125" stroke="#0ea5e9"/>
+        <!-- Region → Center (1:n) -->
+        <path class="erd-line" id="line-region-center" data-rel="region,center" d="M 140 165 L 200 270" stroke="#0ea5e9"/>
+        <!-- Center → Review (1:n) -->
+        <path class="erd-line" id="line-center-review" data-rel="center,review" d="M 320 330 L 600 380" stroke="#ec4899"/>
+        <!-- Center ↔ Tag (n:m) -->
+        <path class="erd-line nm" id="line-center-tag" data-rel="center,tag,center_tag" d="M 310 280 L 500 220" stroke="#6366f1"/>
+        <!-- Review ↔ Tag (n:m) -->
+        <path class="erd-line nm" id="line-review-tag" data-rel="review,tag,review_tag" d="M 650 360 L 570 240" stroke="#6366f1"/>
+        <!-- User → Review (1:n) -->
+        <path class="erd-line" id="line-user-review" data-rel="user,review" d="M 890 170 L 760 380" stroke="#f59e0b"/>
+        <!-- Review → ReviewReport (1:n) -->
+        <path class="erd-line" id="line-review-report" data-rel="review,report" d="M 740 460 L 880 540" stroke="#10b981"/>
+        <!-- Polymorphic → AuditLog (dashed) -->
+        <path class="erd-line nm" id="line-audit-center" data-rel="audit,center" d="M 260 340 C 260 480, 380 560, 440 580" stroke="#94a3b8"/>
+        <path class="erd-line nm" id="line-audit-review" data-rel="audit,review" d="M 680 470 C 620 540, 540 580, 500 590" stroke="#94a3b8"/>
+        <path class="erd-line nm" id="line-audit-tag" data-rel="audit,tag" d="M 560 240 C 560 420, 500 540, 470 580" stroke="#94a3b8"/>
+        <path class="erd-line nm" id="line-audit-region" data-rel="audit,region" d="M 160 170 C 200 340, 300 500, 420 580" stroke="#94a3b8"/>
+
+        <!-- Relation labels -->
+        <g data-rel="region">
+          <rect class="erd-label-bg" x="245" y="85" width="26" height="18" rx="4"/>
+          <text class="erd-label" x="258" y="98" text-anchor="middle">자기참조</text>
+        </g>
+        <g data-rel="region,center">
+          <rect class="erd-label-bg" x="155" y="205" width="30" height="18" rx="4"/>
+          <text class="erd-label" x="170" y="218" text-anchor="middle">1 : N</text>
+        </g>
+        <g data-rel="center,review">
+          <rect class="erd-label-bg" x="440" y="345" width="30" height="18" rx="4"/>
+          <text class="erd-label" x="455" y="358" text-anchor="middle">1 : N</text>
+        </g>
+        <g data-rel="center,tag,center_tag">
+          <rect class="erd-label-bg" x="390" y="240" width="36" height="18" rx="4"/>
+          <text class="erd-label" x="408" y="253" text-anchor="middle">N : M</text>
+        </g>
+        <g data-rel="review,tag,review_tag">
+          <rect class="erd-label-bg" x="590" y="295" width="36" height="18" rx="4"/>
+          <text class="erd-label" x="608" y="308" text-anchor="middle">N : M</text>
+        </g>
+        <g data-rel="user,review">
+          <rect class="erd-label-bg" x="805" y="260" width="30" height="18" rx="4"/>
+          <text class="erd-label" x="820" y="273" text-anchor="middle">1 : N</text>
+        </g>
+        <g data-rel="review,report">
+          <rect class="erd-label-bg" x="795" y="495" width="30" height="18" rx="4"/>
+          <text class="erd-label" x="810" y="508" text-anchor="middle">1 : N</text>
+        </g>
+      </svg>
+
+      <!-- Entities (positioned absolutely over SVG) -->
+      <!-- Region: top-left -->
+      <div class="erd-entity erd-card-e" data-entity="region" style="left: 3%; top: 10%;">
+        <div class="flex items-center gap-1.5">📍 <span class="ent-title">지역</span></div>
+        <div class="ent-sub">도 · 시 · 구 · 동</div>
+        <div class="ent-fields">예) 서울시 → 양천구<br>→ 목동</div>
+      </div>
+
+      <!-- Center: center-left -->
+      <div class="erd-entity erd-card-c" data-entity="center" style="left: 14%; top: 38%;">
+        <div class="flex items-center gap-1.5">🏥 <span class="ent-title">발달센터</span></div>
+        <div class="ent-sub">센터 정보</div>
+        <div class="ent-fields">이름 · 지역 · 주소<br>전화 · 지도 URL<br>후기 개수 · 인기 태그</div>
+      </div>
+
+      <!-- Tag: middle-top -->
+      <div class="erd-entity erd-card-t" data-entity="tag" style="left: 43%; top: 26%;">
+        <div class="flex items-center gap-1.5">🏷️ <span class="ent-title">태그</span></div>
+        <div class="ent-sub">분류 (유형·강점·환경)</div>
+        <div class="ent-fields">예) 언어치료<br>친절한 선생님<br>주차 편리</div>
+      </div>
+
+      <!-- Review: middle-right -->
+      <div class="erd-entity erd-card-r" data-entity="review" style="left: 56%; top: 52%;">
+        <div class="flex items-center gap-1.5">💬 <span class="ent-title">후기</span></div>
+        <div class="ent-sub">한 줄 리뷰</div>
+        <div class="ent-fields">어느 센터<br>누가 썼는지<br>내용(100자) · 상태</div>
+      </div>
+
+      <!-- User: top-right -->
+      <div class="erd-entity erd-card-u" data-entity="user" style="right: 3%; top: 10%;">
+        <div class="flex items-center gap-1.5">👤 <span class="ent-title">이용자</span></div>
+        <div class="ent-sub">카카오 로그인</div>
+        <div class="ent-fields">카카오 계정 기반<br>닉네임 · 이메일</div>
+      </div>
+
+      <!-- ReviewReport: bottom-right -->
+      <div class="erd-entity erd-card-p" data-entity="report" style="right: 3%; top: 72%;">
+        <div class="flex items-center gap-1.5">🚩 <span class="ent-title">후기 신고</span></div>
+        <div class="ent-sub">신고 내역</div>
+        <div class="ent-fields">어느 후기<br>신고자 · 사유<br>처리 여부</div>
+      </div>
+
+      <!-- AuditLog: bottom-center -->
+      <div class="erd-entity erd-card-a" data-entity="audit" style="left: 34%; top: 78%;">
+        <div class="flex items-center gap-1.5">📜 <span class="ent-title">변경 이력</span></div>
+        <div class="ent-sub">운영자 작업 기록</div>
+        <div class="ent-fields">누가 · 언제<br>무엇을 수정했는지<br>자동 기록</div>
+      </div>
+    </div>
+
+    <!-- Relationship detail panel (updates on hover) -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="bg-slate-50 rounded-lg p-3 text-[12px]">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="rel-tag rel-1">1</span><span class="rel-tag rel-n">N</span>
+          <span class="font-semibold text-slate-900">Region → Center / Review · User → Review</span>
+        </div>
+        <p class="text-slate-600 leading-relaxed">하나의 지역은 여러 센터를 포함, 하나의 센터는 여러 후기를 가짐. 한 유저는 여러 후기 작성.</p>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 text-[12px]">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="rel-tag rel-nm">N:M</span>
+          <span class="font-semibold text-slate-900">Center ↔ Tag / Review ↔ Tag</span>
+        </div>
+        <p class="text-slate-600 leading-relaxed">한 센터/후기는 여러 태그를 가지고, 한 태그는 여러 센터/후기에 붙음. 조인 테이블(center_tag, review_tag) 경유.</p>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 text-[12px]">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="rel-tag rel-1">1</span><span class="rel-tag rel-n">N</span>
+          <span class="font-semibold text-slate-900">Review → ReviewReport</span>
+        </div>
+        <p class="text-slate-600 leading-relaxed">하나의 후기에 여러 신고가 쌓임. 신고 사유 별도 기록해 관리자 검토 시 패턴 분석 가능.</p>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 text-[12px]">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="rel-tag rel-n">N</span><span class="rel-tag rel-1">1</span>
+          <span class="font-semibold text-slate-900">AuditLog (polymorphic)</span>
+        </div>
+        <p class="text-slate-600 leading-relaxed">모든 엔티티 변경을 하나의 로그 테이블로 통합 기록. entity 문자열 + entity_id로 다형적(polymorphic) 참조.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const entities = document.querySelectorAll('.erd-entity');
+      const lines = document.querySelectorAll('.erd-line');
+      const labels = document.querySelectorAll('[data-rel]');
+      const labelGroups = Array.from(document.querySelectorAll('svg g[data-rel]'));
+
+      function activate(entityId) {
+        // dim all
+        entities.forEach(function(el) {
+          el.classList.remove('active');
+          if (entityId && el.dataset.entity !== entityId) el.classList.add('dim');
+          else el.classList.remove('dim');
+        });
+        lines.forEach(function(line) {
+          line.classList.remove('on');
+          const rel = (line.dataset.rel || '').split(',');
+          if (entityId) {
+            if (rel.includes(entityId)) { line.classList.remove('dim'); line.classList.add('on'); }
+            else line.classList.add('dim');
+          } else {
+            line.classList.remove('dim');
+          }
+        });
+        labelGroups.forEach(function(lg) {
+          const rel = (lg.dataset.rel || '').split(',');
+          if (entityId) {
+            lg.style.opacity = rel.includes(entityId) ? 1 : 0.2;
+          } else {
+            lg.style.opacity = 1;
+          }
+        });
+        if (entityId) {
+          const el = document.querySelector('[data-entity="' + entityId + '"]');
+          if (el) el.classList.add('active');
+        }
+      }
+
+      entities.forEach(function(el) {
+        el.addEventListener('mouseenter', function() { activate(el.dataset.entity); });
+        el.addEventListener('mouseleave', function() { activate(null); });
+        el.addEventListener('click', function(e) {
+          e.stopPropagation();
+          activate(el.dataset.entity);
+        });
+      });
+
+      document.getElementById('erd-canvas').addEventListener('click', function() { activate(null); });
+    })();
+  </script>
+</section>
+
 <!-- Q1 -->
 <section id="q1" class="max-w-[1100px] mx-auto px-6 pb-10 anchor">
   <div class="mb-6">
@@ -118,11 +356,10 @@
           <div class="quote-box">"지역 기반 센터 리스트 조회"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            <strong>Region</strong> 테이블을 <span class="mono text-slate-900">parent_id</span> 자기참조로 계층화
-            (도 → 시 → 구 → 동). Center는 <span class="mono text-slate-900">region_id</span>로 소속.
-            구 단위 선택 시 하위 동까지 포함해 조회.
+            지역을 <strong>서울 → 양천구 → 목동</strong> 같은 계층 구조로 저장합니다.
+            구를 선택하면 하위 동의 센터까지 자동 포함해서 보여줍니다.
           </div>
         </div>
       </div>
@@ -136,11 +373,11 @@
           <div class="quote-box">"센터명 및 치료 유형 기반 검색"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            센터명은 <strong>PostgreSQL full-text</strong> 인덱스. 치료 유형은
-            <strong>Tag(category='type')</strong> 필터로, <span class="mono text-slate-900">center_tag</span> 조인으로 검색.
-            복합 인덱스 <span class="mono text-slate-900">(region_id, status)</span>로 리스트 조회 성능 확보.
+            센터 이름으로 빠르게 찾는 검색 + 치료 유형(언어·감각통합·놀이) 필터를 함께
+            제공. 데이터가 수만 건으로 늘어나도 <strong>즉시 결과가 나오도록</strong>
+            검색용 색인을 미리 만들어둡니다.
           </div>
         </div>
       </div>
@@ -154,11 +391,11 @@
           <div class="quote-box">"센터 상세 페이지 (후기 요약, 후기 미리보기)"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            Center에 <strong>캐시 필드</strong> (<span class="mono text-slate-900">review_count, top_tags</span>) 추가.
-            후기 작성·삭제 시 트리거로 자동 갱신 → 상세 페이지 로딩 1회 쿼리로 완료.
-            미리보기는 최신 3개를 join으로 같이 내림.
+            센터마다 <strong>'후기 개수 · 인기 태그 3개'</strong>를 미리 계산해 저장해 둡니다.
+            상세 페이지가 열릴 때 매번 계산하지 않고 바로 불러오기만 하므로
+            후기가 수천 개 쌓여도 느려지지 않습니다.
           </div>
         </div>
       </div>
@@ -172,11 +409,10 @@
           <div class="quote-box">"후기 리스트 조회 (최신순 정렬)"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            Review에 <strong>복합 인덱스</strong> <span class="mono text-slate-900">(center_id, status, created_at DESC)</span>.
-            무한 스크롤은 <span class="mono text-slate-900">created_at</span> 커서 기반 페이지네이션으로
-            수만 건도 일정 속도 유지.
+            스크롤을 내리면 이어서 보이는 <strong>무한 스크롤</strong> 방식.
+            오래된 후기가 쌓여도 앞부분 로딩 속도는 처음과 동일하게 유지됩니다.
           </div>
         </div>
       </div>
@@ -190,11 +426,11 @@
           <div class="quote-box">"후기 작성 기능 (태그 선택 + 한 줄 후기)"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            Review에 <strong>한 줄 제한</strong> (CHECK <span class="mono text-slate-900">length(content) ≤ 100</span>).
-            태그는 <span class="mono text-slate-900">review_tag</span> 다대다. 태그는 카테고리별로 그룹핑돼
-            "치료 유형 1개 + 강점 여러 개" 같은 선택 규칙 적용.
+            글은 <strong>한 줄(100자 이내)</strong>, 태그는 카테고리별로 '치료 유형 1개 +
+            강점 여러 개' 같은 선택 규칙으로 구성. 학부모가 부담 없이 빠르게 쓸 수
+            있도록 진입장벽을 낮춥니다.
           </div>
         </div>
       </div>
@@ -208,11 +444,11 @@
           <div class="quote-box">"카카오 로그인 (후기 작성 시)"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            Supabase Auth + <strong>Kakao OAuth Provider</strong> 연동. 탐색·리스트·상세는 비로그인
-            허용, 후기 작성 버튼 클릭 시에만 로그인 요구하는 <strong>'선택적 인증'</strong>으로
-            학부모 진입장벽 최소화.
+            탐색·리스트·상세는 <strong>로그인 없이 자유롭게</strong>. 후기 작성 버튼을
+            누르는 순간에만 카카오 로그인을 요구하는 '선택적 로그인' 방식으로
+            학부모 이탈을 최소화합니다.
           </div>
         </div>
       </div>
@@ -226,11 +462,10 @@
           <div class="quote-box">"카카오톡 공유 기능"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            Kakao JavaScript SDK로 <strong>피드형 공유</strong>. 공유 카드에는 센터명, 지역,
-            대표 태그 3개, 공유 전용 딥링크를 넣어 앱으로 바로 복귀하도록 구성.
-            스키마에 별도 테이블 불필요.
+            카카오톡으로 센터를 공유하면 받은 사람이 바로 센터 상세를 열 수 있게
+            공유 카드에 센터명·지역·대표 태그를 넣습니다.
           </div>
         </div>
       </div>
@@ -244,11 +479,11 @@
           <div class="quote-box">"네이버 지도 연동 (외부 이동)"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            Center 테이블에 <span class="mono text-slate-900">naver_map_url</span> 필드 저장.
-            상세 화면 '지도 보기' 버튼 → 네이버 지도 앱/웹으로 이동(fallback 처리).
-            좌표(lat/lng)도 함께 저장해 추후 인앱 지도 전환에 대비.
+            센터 상세의 '지도 보기' 버튼을 누르면 네이버 지도 앱/웹으로 이동. 좌표도
+            함께 저장해둬서 <strong>나중에 앱 안에서 직접 지도 보기</strong>로 확장할
+            때 준비가 되어 있습니다.
           </div>
         </div>
       </div>
@@ -262,10 +497,10 @@
           <div class="quote-box">"관리자 페이지 (센터/후기/태그/지역 관리)"</div>
         </div>
         <div>
-          <div class="chip chip-sky mb-2">설계</div>
+          <div class="chip chip-sky mb-2">설계 방향</div>
           <div class="text-[13px] text-slate-700 leading-relaxed">
-            4개 엔티티 각각 CRUD + 아래 6가지 운영 기능 내장.
-            <strong>"누가·언제·뭘 수정했는지"</strong>는 audit_log 테이블에 자동 기록 → 복원 가능.
+            4개 항목(센터·후기·태그·지역)을 각각 관리하는 페이지 + 아래 6가지 운영 기능.
+            <strong>누가·언제·뭘 수정했는지 자동 기록</strong>되어 언제든 복원 가능합니다.
           </div>
         </div>
       </div>
@@ -495,96 +730,6 @@
       바로 진입 가능합니다.
     </p>
   </div>
-</section>
-
-<!-- SQL -->
-<section id="sql" class="max-w-[1100px] mx-auto px-6 pb-16 anchor">
-  <div class="mb-6">
-    <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">부록 · 실제 SQL 스키마</div>
-    <h2 class="text-[22px] font-bold">의뢰 기능이 모두 반영된 스키마</h2>
-  </div>
-
-  <div class="code-block"><span class="cmt">-- 1. 지역 (계층 구조) — "지역 기반 센터 리스트 조회"</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">region</span> (
-  id           <span class="type">bigserial PRIMARY KEY</span>,
-  name         <span class="type">text NOT NULL</span>,
-  parent_id    <span class="type">bigint REFERENCES region(id)</span>,
-  level        <span class="type">smallint NOT NULL</span>,
-  sort_order   <span class="type">int DEFAULT 0</span>
-);
-
-<span class="cmt">-- 2. 발달센터 — "센터 상세 (후기 요약, 미리보기)" 대응 캐시 필드 포함</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">center</span> (
-  id              <span class="type">bigserial PRIMARY KEY</span>,
-  name            <span class="type">text NOT NULL</span>,
-  region_id       <span class="type">bigint NOT NULL REFERENCES region(id)</span>,
-  address         <span class="type">text</span>,
-  phone           <span class="type">text</span>,
-  naver_map_url   <span class="type">text</span>,
-  lat             <span class="type">double precision</span>,
-  lng             <span class="type">double precision</span>,
-  review_count    <span class="type">int DEFAULT 0</span>,          <span class="cmt">-- 후기 요약 캐시</span>
-  top_tags        <span class="type">text[] DEFAULT</span> <span class="str">'{}'</span>,     <span class="cmt">-- 상위 태그 캐시</span>
-  status          <span class="type">text DEFAULT</span> <span class="str">'active'</span>,
-  created_at      <span class="type">timestamptz DEFAULT now()</span>,
-  updated_at      <span class="type">timestamptz DEFAULT now()</span>
-);
-<span class="kw">CREATE INDEX</span> ON <span class="fn">center</span> (region_id, status);
-
-<span class="cmt">-- 3. 태그 (카테고리화) — "태그 선택 + 한 줄 후기" 대응</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">tag</span> (
-  id          <span class="type">bigserial PRIMARY KEY</span>,
-  name        <span class="type">text NOT NULL UNIQUE</span>,
-  category    <span class="type">text NOT NULL</span>,              <span class="cmt">-- type | strength | env</span>
-  aliases     <span class="type">text[] DEFAULT</span> <span class="str">'{}'</span>,
-  parent_id   <span class="type">bigint REFERENCES tag(id)</span>,
-  sort_order  <span class="type">int DEFAULT 0</span>
-);
-
-<span class="cmt">-- 4. 후기 — "후기 리스트 (최신순 정렬)" 대응 인덱스</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">review</span> (
-  id            <span class="type">bigserial PRIMARY KEY</span>,
-  center_id     <span class="type">bigint NOT NULL REFERENCES center(id)</span>,
-  author_id     <span class="type">uuid NOT NULL REFERENCES auth.users(id)</span>,  <span class="cmt">-- 카카오 로그인 유저</span>
-  content       <span class="type">text NOT NULL CHECK (length(content) &lt;= 100)</span>,  <span class="cmt">-- 한 줄</span>
-  status        <span class="type">text DEFAULT</span> <span class="str">'visible'</span>,
-  report_count  <span class="type">int DEFAULT 0</span>,
-  created_at    <span class="type">timestamptz DEFAULT now()</span>
-);
-<span class="kw">CREATE INDEX</span> ON <span class="fn">review</span> (center_id, status, created_at <span class="kw">DESC</span>);
-
-<span class="cmt">-- 5. 조인 테이블 (다대다)</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">center_tag</span> (
-  center_id  <span class="type">bigint REFERENCES center(id) ON DELETE CASCADE</span>,
-  tag_id     <span class="type">bigint REFERENCES tag(id)</span>,
-  <span class="kw">PRIMARY KEY</span> (center_id, tag_id)
-);
-<span class="kw">CREATE TABLE</span> <span class="fn">review_tag</span> (
-  review_id  <span class="type">bigint REFERENCES review(id) ON DELETE CASCADE</span>,
-  tag_id     <span class="type">bigint REFERENCES tag(id)</span>,
-  <span class="kw">PRIMARY KEY</span> (review_id, tag_id)
-);
-
-<span class="cmt">-- 6. 신고 상세 — 관리자 검토용</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">review_report</span> (
-  id           <span class="type">bigserial PRIMARY KEY</span>,
-  review_id    <span class="type">bigint NOT NULL REFERENCES review(id)</span>,
-  reporter_id  <span class="type">uuid NOT NULL</span>,
-  reason       <span class="type">text NOT NULL</span>,
-  resolved     <span class="type">boolean DEFAULT false</span>,
-  created_at   <span class="type">timestamptz DEFAULT now()</span>
-);
-
-<span class="cmt">-- 7. 감사 로그 — "누가 언제 뭘 수정했는지 자동 기록"</span>
-<span class="kw">CREATE TABLE</span> <span class="fn">audit_log</span> (
-  id          <span class="type">bigserial PRIMARY KEY</span>,
-  actor_id    <span class="type">uuid NOT NULL</span>,
-  entity      <span class="type">text NOT NULL</span>,
-  entity_id   <span class="type">bigint NOT NULL</span>,
-  action      <span class="type">text NOT NULL</span>,
-  diff        <span class="type">jsonb</span>,
-  created_at  <span class="type">timestamptz DEFAULT now()</span>
-);</div>
 </section>
 
 <!-- Footer -->
