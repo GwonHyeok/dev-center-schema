@@ -25,6 +25,124 @@
     @media (max-width: 768px) { .feature-row { grid-template-columns: 1fr; } }
     .erd-container { background: #ffffff; border-radius: 12px; padding: 20px; min-height: 320px; }
     .erd-container svg { max-width: 100%; height: auto; }
+
+    /* Phone mockup */
+    .phone {
+      background: #0f172a;
+      border-radius: 36px;
+      padding: 8px;
+      max-width: 300px;
+      margin: 0 auto;
+      box-shadow: 0 20px 40px -10px rgba(15,23,42,0.25), 0 2px 8px rgba(15,23,42,0.1);
+    }
+    .phone-screen {
+      background: #f8fafc;
+      border-radius: 28px;
+      padding: 18px 14px;
+      min-height: 420px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #0f172a;
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-notch {
+      height: 22px;
+      background: #0f172a;
+      border-radius: 0 0 14px 14px;
+      width: 100px;
+      margin: -18px auto 14px;
+      position: relative;
+    }
+    .phone-tab {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .chip-sm {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+      margin: 2px 2px 2px 0;
+    }
+    .chip-selected {
+      background: #ec4899;
+      color: white;
+    }
+    .chip-cat {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+    .btn-mock {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      background: #fde047;
+      color: #422006;
+      font-weight: 700;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    .btn-primary-mock {
+      background: #0f172a;
+      color: white;
+    }
+    .btn-outline-mock {
+      background: white;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+    }
+    .admin-mock {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 14px;
+      font-size: 12px;
+      max-width: 100%;
+      box-shadow: 0 6px 20px rgba(15,23,42,0.04);
+    }
+    .admin-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 11.5px;
+    }
+    .admin-row:last-child { border-bottom: none; }
+    .admin-header {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .kakao-card {
+      background: linear-gradient(135deg, #fef08a, #fde047);
+      border-radius: 14px;
+      padding: 16px;
+      color: #422006;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #64748b;
+      margin-bottom: 10px;
+      padding: 0 4px;
+    }
+    .feature-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+    @media (min-width: 768px) { .feature-grid { grid-template-columns: 1fr 320px; } }
   </style>
 </head>
 <body class="min-h-screen">
@@ -151,51 +269,317 @@ flowchart LR
     </div>
   </div>
 
-  <!-- 2. Feature mapping -->
+  <!-- 2. Feature mapping with UI mockups -->
   <div class="panel p-6 mb-5">
-    <h3 class="text-[15px] font-bold mb-1">의뢰서의 각 기능이 위 구조에서 어떻게 동작하나요</h3>
-    <p class="text-[12.5px] text-slate-600 mb-5">의뢰서에 적어주신 요구사항을 하나씩 짚고 설명드립니다.</p>
+    <h3 class="text-[15px] font-bold mb-1">의뢰서 기능이 실제로 어떻게 동작하는지 — UI 예시와 함께</h3>
+    <p class="text-[12.5px] text-slate-600 mb-6">각 요구사항이 앱 화면에서 어떻게 보이고 동작할지, 모형을 함께 보여드립니다.</p>
 
-    <div class="space-y-4">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"지역 기반 센터 리스트 조회"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">지역을 <strong>서울 → 양천구 → 목동</strong>처럼 계층으로 저장. 구만 선택해도 하위 동에 속한 센터까지 함께 보여줍니다.</div></div>
+    <div class="space-y-10">
+
+      <!-- F1: 지역 기반 센터 리스트 -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ①</div>
+          <div class="quote-box mb-3">"지역 기반 센터 리스트 조회"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            지역을 <strong>서울 → 양천구 → 목동</strong>처럼 계층으로 저장.
+            구를 선택해도 하위 동에 속한 센터까지 함께 보여줍니다.
+            상단에 현재 선택된 지역을 명확히 표시해, 필터가 걸려 있음을
+            잊지 않게 합니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="font-bold text-[13px]">센터 찾기</div>
+              <div class="text-[18px]">👤</div>
+            </div>
+            <div class="phone-tab flex items-center justify-between cursor-pointer">
+              <div><span class="chip-sm chip-cat">지역</span> <span class="font-semibold">서울 · 양천구</span></div>
+              <span class="text-slate-400">▾</span>
+            </div>
+            <div class="text-[10px] text-slate-500 mt-2 mb-1 px-1">센터 12곳</div>
+            <div class="phone-tab">
+              <div class="font-semibold text-[12px]">🏥 아이사랑발달센터</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">목동 · 02-2***-****</div>
+              <div class="mt-1.5">
+                <span class="chip-sm chip-cat">언어치료</span>
+                <span class="chip-sm">친절한 선생님</span>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-1">💬 후기 24</div>
+            </div>
+            <div class="phone-tab">
+              <div class="font-semibold text-[12px]">🏥 행복한놀이치료실</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">신정동 · 02-2***-****</div>
+              <div class="mt-1.5">
+                <span class="chip-sm chip-cat">놀이치료</span>
+                <span class="chip-sm">깔끔한 시설</span>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-1">💬 후기 18</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"센터명 및 치료 유형 검색"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">이름 검색 + 치료 유형(언어·감각통합·놀이) 필터를 함께 제공. 데이터가 수만 건이 돼도 <strong>즉시 결과</strong>가 나오도록 미리 준비합니다.</div></div>
+
+      <!-- F2: 센터 검색 + 치료 유형 -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ②</div>
+          <div class="quote-box mb-3">"센터명 및 치료 유형 기반 검색"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            상단에 검색창 + 치료 유형 필터를 함께 배치.
+            수만 건으로 늘어나도 <strong>즉시 결과</strong>가 나오도록 미리 준비합니다.
+            필터를 복수 선택하면 '모두 포함' 조건으로 좁혀집니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="phone-tab flex items-center gap-2">
+              <span class="text-slate-400">🔍</span>
+              <span class="text-slate-500 text-[11.5px]">아이사랑…</span>
+            </div>
+            <div class="text-[10px] text-slate-500 px-1 mb-1">치료 유형</div>
+            <div class="flex flex-wrap px-1 mb-3">
+              <span class="chip-sm chip-selected">언어치료 ✓</span>
+              <span class="chip-sm">감각통합</span>
+              <span class="chip-sm chip-selected">놀이치료 ✓</span>
+              <span class="chip-sm">인지학습</span>
+            </div>
+            <div class="text-[10px] text-slate-500 px-1 mb-1">결과 8곳</div>
+            <div class="phone-tab">
+              <div class="font-semibold text-[12px]">🏥 아이사랑발달센터</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">목동</div>
+              <div class="mt-1.5">
+                <span class="chip-sm chip-cat">언어치료</span>
+                <span class="chip-sm chip-cat">놀이치료</span>
+              </div>
+            </div>
+            <div class="phone-tab">
+              <div class="font-semibold text-[12px]">🏥 새싹아동발달</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">신정동</div>
+              <div class="mt-1.5">
+                <span class="chip-sm chip-cat">언어치료</span>
+                <span class="chip-sm chip-cat">놀이치료</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"센터 상세 (후기 요약, 미리보기)"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">센터마다 <strong>'후기 개수 · 인기 태그 3개'를 미리 계산해 저장</strong>. 상세 페이지가 열릴 때 매번 계산하지 않아, 후기 수천 개가 쌓여도 느려지지 않습니다.</div></div>
+
+      <!-- F3: 센터 상세 (후기 요약, 미리보기) -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ③</div>
+          <div class="quote-box mb-3">"센터 상세 (후기 요약, 후기 미리보기)"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            센터마다 <strong>'후기 개수 · 인기 태그 3개'를 미리 계산해 저장</strong>.
+            상세 페이지가 열릴 때 매번 계산하지 않으므로,
+            후기가 수천 개 쌓여도 로딩 속도가 처음과 같습니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="status-bar"><span>← 뒤로</span><span>🔗 공유</span></div>
+            <div class="font-bold text-[14px]">아이사랑발달센터</div>
+            <div class="text-[10.5px] text-slate-500 mt-0.5">📍 서울 양천구 목동 · 📞 02-2***-****</div>
+            <div class="mt-2.5 mb-3">
+              <span class="chip-sm chip-cat">언어치료</span>
+              <span class="chip-sm chip-cat">놀이치료</span>
+            </div>
+            <div class="phone-tab">
+              <div class="flex items-center justify-between mb-2">
+                <div class="font-semibold text-[12px]">💬 후기 요약</div>
+                <div class="text-[10px] text-slate-500">24개</div>
+              </div>
+              <div class="text-[10.5px] text-slate-500 mb-1.5">인기 태그</div>
+              <div>
+                <span class="chip-sm">친절한 선생님 ×18</span>
+                <span class="chip-sm">주차 편리 ×14</span>
+                <span class="chip-sm">깔끔한 시설 ×11</span>
+              </div>
+            </div>
+            <div class="text-[10.5px] text-slate-500 px-1 mb-1">최근 후기</div>
+            <div class="phone-tab">
+              <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
+              <div class="text-[9.5px] text-slate-400 mt-1">친절한 선생님 · 2일 전</div>
+            </div>
+            <div class="phone-tab">
+              <div class="text-[11.5px]">"시설이 깨끗해서 좋아요"</div>
+              <div class="text-[9.5px] text-slate-400 mt-1">깔끔한 시설 · 3일 전</div>
+            </div>
+            <div class="btn-mock btn-outline-mock mt-2">후기 전체 보기 →</div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"후기 리스트 (최신순)"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">스크롤을 내리면 이어서 보이는 <strong>무한 스크롤</strong>. 오래된 후기가 아무리 쌓여도 앞부분 로딩 속도는 처음과 동일합니다.</div></div>
+
+      <!-- F4: 후기 리스트 (최신순, 무한 스크롤) -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ④</div>
+          <div class="quote-box mb-3">"후기 리스트 조회 (최신순 정렬)"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            스크롤을 내리면 이어서 보이는 <strong>무한 스크롤</strong>.
+            오래된 후기가 아무리 쌓여도 앞부분 로딩 속도는 처음과 동일합니다.
+            신고가 들어온 후기는 자동 숨김 처리되어 사용자에게 보이지 않습니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="status-bar"><span>← 뒤로</span><span>아이사랑발달센터</span></div>
+            <div class="font-bold text-[13px] mb-3">전체 후기 (24)</div>
+            <div class="phone-tab">
+              <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
+              <div class="mt-1"><span class="chip-sm chip-cat">친절한 선생님</span></div>
+              <div class="text-[9.5px] text-slate-400 mt-1">2일 전</div>
+            </div>
+            <div class="phone-tab">
+              <div class="text-[11.5px]">"주차가 편해서 다니기 좋아요"</div>
+              <div class="mt-1"><span class="chip-sm chip-cat">주차 편리</span></div>
+              <div class="text-[9.5px] text-slate-400 mt-1">3일 전</div>
+            </div>
+            <div class="phone-tab">
+              <div class="text-[11.5px]">"아이가 집중을 잘해요"</div>
+              <div class="mt-1"><span class="chip-sm chip-cat">집중력 향상</span></div>
+              <div class="text-[9.5px] text-slate-400 mt-1">5일 전</div>
+            </div>
+            <div class="text-center text-[10px] text-slate-400 mt-2">⋯ 아래로 더 불러오는 중</div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"후기 작성 (태그 + 한 줄)"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">글은 <strong>한 줄(100자 이내)</strong>, 태그는 '치료 유형 1개 + 강점 여러 개'처럼 카테고리별 선택 규칙. 학부모가 30초 안에 쓸 수 있게.</div></div>
+
+      <!-- F5: 후기 작성 (태그 + 한 줄) -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ⑤</div>
+          <div class="quote-box mb-3">"후기 작성 (태그 선택 + 한 줄 후기)"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            글은 <strong>한 줄(100자 이내)</strong>, 태그는 '치료 유형 1개 + 강점 여러 개'의
+            선택 규칙. 학부모가 30초 안에 쓸 수 있도록 설계.
+            카테고리별로 태그가 묶여 있어 선택이 직관적입니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="status-bar"><span>✕ 닫기</span><span>후기 작성</span></div>
+            <div class="text-[10.5px] text-slate-500 mb-1.5">한 줄 후기</div>
+            <div class="phone-tab" style="background:#fafafa">
+              <div class="text-[11.5px]">"선생님이 아이랑 잘 맞아요"</div>
+              <div class="text-[9.5px] text-slate-400 text-right mt-1">16/100</div>
+            </div>
+            <div class="text-[10.5px] text-slate-500 mt-3 mb-1.5">치료 유형 <span class="text-slate-400">(1개)</span></div>
+            <div class="flex flex-wrap">
+              <span class="chip-sm chip-selected">언어치료 ✓</span>
+              <span class="chip-sm">감각통합</span>
+              <span class="chip-sm">놀이치료</span>
+            </div>
+            <div class="text-[10.5px] text-slate-500 mt-3 mb-1.5">강점 <span class="text-slate-400">(복수 선택 가능)</span></div>
+            <div class="flex flex-wrap">
+              <span class="chip-sm chip-selected">친절한 선생님 ✓</span>
+              <span class="chip-sm">깔끔한 시설</span>
+              <span class="chip-sm chip-selected">주차 편리 ✓</span>
+              <span class="chip-sm">아이가 좋아함</span>
+            </div>
+            <div class="btn-mock btn-primary-mock mt-4">후기 등록</div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"카카오 로그인 (후기 작성 시)"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">탐색·리스트·상세는 <strong>로그인 없이 자유롭게</strong>. 후기 작성 버튼을 누르는 순간만 카카오 로그인 요구. 학부모 이탈 최소화.</div></div>
+
+      <!-- F6: 카카오 로그인 (선택적) -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ⑥</div>
+          <div class="quote-box mb-3">"카카오 로그인 (후기 작성 시)"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            탐색·리스트·상세는 <strong>로그인 없이 자유롭게</strong>.
+            후기 작성 버튼을 누르는 순간만 카카오 로그인 팝업이 뜹니다.
+            이렇게 하면 대부분의 학부모가 앱을 <strong>이탈 없이 탐색</strong>하고,
+            후기 쓸 때만 잠깐 로그인하게 됩니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen" style="display:flex;flex-direction:column;justify-content:center;">
+            <div class="phone-notch"></div>
+            <div style="text-align:center;padding:20px 8px;">
+              <div style="font-size:36px;margin-bottom:6px;">💬</div>
+              <div class="font-bold text-[14px] mb-1">후기 작성하려면</div>
+              <div class="font-bold text-[14px] mb-4">로그인이 필요해요</div>
+              <div class="text-[10.5px] text-slate-500 mb-5 leading-relaxed">
+                로그인 없이도 센터와 후기는<br>
+                자유롭게 보실 수 있어요.
+              </div>
+              <div class="btn-mock">💛 카카오로 3초 만에 시작</div>
+              <div class="text-[10px] text-slate-400 mt-3">나중에 할게요</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"카카오톡 공유"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">공유 카드에 센터명·지역·대표 태그를 넣어, 받은 사람이 앱에서 바로 그 센터를 열 수 있게 합니다.</div></div>
+
+      <!-- F7: 카카오톡 공유 -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ⑦</div>
+          <div class="quote-box mb-3">"카카오톡 공유 기능"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            공유 카드에 센터명·지역·대표 태그를 넣어, 받은 사람이 앱에서 바로
+            그 센터를 열 수 있게 합니다. 학부모끼리 '이 센터 추천해요' 공유가
+            실제로 자연스럽게 일어나도록 카드 디자인을 깔끔하게 가져갑니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen" style="background:#abc1d1">
+            <div class="phone-notch"></div>
+            <div class="text-[10.5px] text-slate-700 mb-2 font-semibold">카카오톡 · 엄마들 채팅방</div>
+            <div style="background:white;border-radius:14px;padding:10px;max-width:90%;margin-left:auto;">
+              <div class="text-[11px] text-slate-700 mb-2">여기 한번 가보세요!</div>
+              <div class="kakao-card">
+                <div class="font-bold text-[12px] mb-1">🏥 아이사랑발달센터</div>
+                <div class="text-[10px] mb-2">📍 서울 양천구 목동</div>
+                <div class="mb-2">
+                  <span class="chip-sm" style="background:rgba(255,255,255,0.6)">친절한 선생님</span>
+                  <span class="chip-sm" style="background:rgba(255,255,255,0.6)">주차 편리</span>
+                </div>
+                <div class="text-[10px] font-semibold">앱에서 자세히 보기 →</div>
+              </div>
+              <div class="text-[9px] text-slate-400 text-right mt-1.5">오후 2:14</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr class="border-slate-100">
-      <div class="feature-row">
-        <div><div class="chip chip-slate mb-2">의뢰서</div><div class="quote-box">"네이버 지도 연동"</div></div>
-        <div><div class="chip chip-sky mb-2">동작</div><div class="text-[13px] text-slate-700 leading-relaxed">'지도 보기' 버튼 → 네이버 지도 앱/웹으로 이동. 좌표도 함께 저장해둬 <strong>나중에 앱 안에서 직접 지도 보기</strong>로 넘어갈 준비까지 해둡니다.</div></div>
+
+      <!-- F8: 네이버 지도 -->
+      <div class="feature-grid">
+        <div>
+          <div class="chip chip-slate mb-2">의뢰서 ⑧</div>
+          <div class="quote-box mb-3">"네이버 지도 연동 (외부 이동)"</div>
+          <div class="text-[13px] text-slate-700 leading-relaxed">
+            '지도 보기' 버튼 → 네이버 지도 앱/웹으로 이동.
+            좌표도 함께 저장해둬서 <strong>나중에 앱 안에서 직접 지도 보기</strong>로
+            넘어갈 때 바로 준비가 되어 있습니다.
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="status-bar"><span>← 뒤로</span><span>위치 정보</span></div>
+            <div class="font-bold text-[13px] mb-1">아이사랑발달센터</div>
+            <div class="text-[10.5px] text-slate-500 mb-3">📍 서울 양천구 목1동 123-45</div>
+            <div style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-radius:12px;height:140px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:30px;">📍</div>
+              <div style="position:absolute;bottom:8px;right:8px;background:white;padding:3px 8px;border-radius:999px;font-size:9px;font-weight:700;color:#047857;">지도 미리보기</div>
+            </div>
+            <div class="btn-mock btn-primary-mock mt-3" style="background:#03c75a;color:white;">🗺️ 네이버 지도로 보기</div>
+            <div class="text-[10px] text-slate-400 mt-2 text-center">좌표가 저장되어 나중에 앱 안 지도로 전환 가능</div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
